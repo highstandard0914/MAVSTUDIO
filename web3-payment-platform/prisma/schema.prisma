@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  walletAddress  String   @unique
+  depositIndex   Int      @unique @default(autoincrement())
+  depositAddress String   @unique
+  balance        Decimal  @default(0) @db.Decimal(28, 8)
+  isAdmin        Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  deposits     Deposit[]
+  withdrawals  Withdrawal[]
+  transactions Transaction[]
+
+  @@index([walletAddress])
+}
+
+model Nonce {
+  id        String   @id @default(cuid())
+  address   String
+  nonce     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([address])
+  @@index([nonce])
+}
+
+model Deposit {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  txHash      String        @unique
+  amount      Decimal       @db.Decimal(28, 8)
+  fromAddress String
+  toAddress   String
+  blockNumber BigInt
+  network     String        @default("ethereum")
+  status      DepositStatus @default(CONFIRMED)
+  createdAt   DateTime      @default(now())
+
+  @@index([userId])
+  @@index([txHash])
+  @@index([toAddress])
+}
+
+model Withdrawal {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  amount      Decimal          @db.Decimal(28, 8)
+  fee         Decimal          @default(0) @db.Decimal(28, 8)
+  toAddress   String
+  txHash      String?          @unique
+  network     String           @default("ethereum")
+  status      WithdrawalStatus @default(PENDING)
+  adminNote   String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  type        TransactionType
+  amount      Decimal         @db.Decimal(28, 8)
+  balanceBefore Decimal       @db.Decimal(28, 8)
+  balanceAfter  Decimal       @db.Decimal(28, 8)
+  description String?
+  refId       String?
+  createdAt   DateTime        @default(now())
+
+  @@index([userId])
+  @@index([type])
+}
+
+enum DepositStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  PROCESSING
+  COMPLETED
+  REJECTED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  PURCHASE
+  REFUND
+  ADJUSTMENT
+}

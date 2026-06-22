@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "static",
+      "runtimeExecutable": "npx.cmd",
+      "runtimeArgs": ["serve", ".", "-l", "8124", "--no-clipboard"],
+      "port": 8124
+    }
+  ]
+}

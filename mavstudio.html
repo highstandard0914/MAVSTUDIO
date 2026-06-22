@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAV STUDIO — Handcrafted Luxury Sofas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  /* Palette — Light tone */
+  --ink:    #2A2520;   /* 헤드라인 등 진한 텍스트 */
+  --ink2:   #3D3630;
+  --ink3:   #5A524A;
+  --cream:  #FAF7F2;   /* 페이지 기본 배경 */
+  --cream2: #F2EDE4;   /* 섹션 구분 배경 */
+  --warm:   #FFFFFF;
+  --gold:   #A07840;   /* 밝은 배경 위에서 더 진한 골드 */
+  --gold2:  #C49A5A;
+  --sand:   #8C7B68;
+
+  /* Type scale */
+  --f-xs:  10px;
+  --f-sm:  13px;
+  --f-md:  15px;
+
+  /* Easing */
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --ease-in-out: cubic-bezier(.76,0,.24,1);
+}
+
+html{scroll-behavior:auto;-webkit-font-smoothing:antialiased}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+
+/* ═══════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════ */
+#c-dot{
+  position:fixed;
+  width:6px; height:6px;
+  background:var(--gold);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .3s var(--ease-out),
+             height .3s var(--ease-out),
+             background .3s;
+}
+#c-ring{
+  position:fixed;
+  width:36px; height:36px;
+  border:1px solid rgba(184,146,90,.35);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:opacity .3s, border-color .3s;
+}
+body.c-hov #c-dot{
+  width:48px; height:48px;
+  background:rgba(184,146,90,.12);
+  border:1px solid rgba(184,146,90,.4);
+}
+body.c-hov #c-ring{opacity:0}
+
+
+/* ═══════════════════════════════════════════
+   LOADER
+═══════════════════════════════════════════ */
+#loader{
+  position:fixed;
+  inset:0;
+  background:var(--cream);
+  z-index:2000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:48px;
+  overflow:hidden;
+}
+
+#loader::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,
+    rgba(160,120,64,.06) 0%,
+    transparent 70%);
+  pointer-events:none;
+}
+
+.ld-emblem{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+}
+
+.ld-wordmark{
+  font-family:'Syne',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.65em;
+  text-transform:uppercase;
+  color:var(--ink);
+  overflow:hidden;
+  line-height:1;
+}
+.ld-wordmark span{
+  display:inline-block;
+  transform:translateY(110%);
+  opacity:0;
+}
+
+.ld-rule{
+  width:1px;
+  height:28px;
+  background:linear-gradient(to bottom, transparent, rgba(160,120,64,.4), transparent);
+  transform:scaleY(0);
+  transform-origin:top;
+}
+
+.ld-sub{
+  font-size:9px;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+  color:rgba(42,37,32,.32);
+  overflow:hidden;
+  line-height:1;
+}
+.ld-sub span{
+  display:block;
+  transform:translateY(100%);
+  opacity:0;
+}
+
+.ld-bar{
+  width:160px;
+  height:1px;
+  background:rgba(42,37,32,.1);
+  overflow:hidden;
+  position:relative;
+}
+.ld-bar-fill{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right, var(--gold), var(--gold2));
+  transform:scaleX(0);
+  transform-origin:left;
+}
+
+.ld-count{
+  font-family:'Syne',sans-serif;
+  font-size:11px;
+  letter-spacing:.2em;
+  color:rgba(160,120,64,.6);
+  font-variant-numeric:tabular-nums;
+}
+
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+#nav{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:800;
+  padding:32px 60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  /* Glass nav — fills in after scroll */
+  transition:padding .6s var(--ease-out),
+             background .5s,
+             backdrop-filter .5s;
+}
+#nav.scrolled{
+  padding:20px 60px;
+  background:rgba(250,247,242,.88);
+  backdrop-filter:blur(20px) saturate(1.6);
+  border-bottom:1px solid rgba(42,37,32,.07);
+}
+
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.52em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+  opacity:0;
+  transform:translateY(-12px);
+}
+
+/* Hero 위에서는 white, 스크롤 후 dark */
+#nav:not(.scrolled) .nav-logo{ color:var(--warm) }
+#nav:not(.scrolled) .nav-links a{ color:rgba(255,255,255,.55) }
+#nav:not(.scrolled) .nav-links a:hover{ color:#fff }
+#nav:not(.scrolled) .nav-cta{ color:#fff; border-color:rgba(255,255,255,.28) }
+
+.nav-links{
+  display:flex;
+  gap:40px;
+  list-style:none;
+  opacity:0;
+  transform:translateY(-12px);
+}
+.nav-links a{
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(42,37,32,.5);
+  text-decoration:none;
+  transition:color .4s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  bottom:-3px; left:0; right:0;
+  height:1px;
+  background:var(--gold);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .4s var(--ease-out);
+}
+.nav-links a:hover{ color:var(--ink) }
+.nav-links a:hover::after{ transform:scaleX(1) }
+
+.nav-cta{
+  font-size:10px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--ink);
+  border:1px solid rgba(42,37,32,.22);
+  padding:11px 24px;
+  text-decoration:none;
+  opacity:0;
+  transform:translateY(-12px);
+  transition:background .4s, border-color .4s, color .4s;
+}
+.nav-cta:hover{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#fff;
+}
+
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#hero{
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:0 60px 80px;
+}
+
+/* ─── Background ─── */
+.hero-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+.hero-bg video{
+  position:absolute;
+  inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  opacity:0;
+  transform:scale(1.06);
+  will-change:opacity,transform;
+}
+.hero-bg .slide{
+  position:absolute;
+  inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  opacity:0;
+  transform:scale(1.06);
+  will-change:opacity,transform;
+}
+
+/* ─── Vignette layers ─── */
+.hero-vig-bottom{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(
+    to top,
+    rgba(8,6,4,.65)    0%,
+    rgba(8,6,4,.22)    35%,
+    rgba(8,6,4,.04)    65%,
+    transparent        100%
+  );
+  pointer-events:none;
+}
+.hero-vig-top{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(
+    to bottom,
+    rgba(8,6,4,.28)    0%,
+    transparent        38%
+  );
+  pointer-events:none;
+}
+
+/* ─── Content ─── */
+.hero-content{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+/* Eyebrow */
+.hero-tag{
+  font-size:10px;
+  letter-spacing:.48em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:28px;
+  overflow:hidden;
+  line-height:1;
+}
+.hero-tag span{
+  display:block;
+  transform:translateY(110%);
+}
+
+/* Headline */
+.hero-h{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(40px,5.2vw,86px);
+  font-weight:800;
+  line-height:.90;
+  letter-spacing:-.025em;
+  text-transform:uppercase;
+  color:var(--warm);
+  margin-bottom:40px;
+}
+/* Each word wrapped in .w > span for reveal */
+.hero-h .w{
+  display:inline-block;
+  overflow:hidden;
+  margin-right:.1em;
+}
+.hero-h .w span{
+  display:block;
+  transform:translateY(105%) rotate(1.5deg);
+  transform-origin:bottom left;
+}
+
+/* Left block */
+.hero-left{}
+
+/* Right block */
+.hero-right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:20px;
+  padding-bottom:6px;
+}
+
+.hero-sub{
+  font-size:13px;
+  line-height:1.9;
+  color:rgba(253,250,246,.55);
+  text-align:right;
+  max-width:260px;
+  overflow:hidden;
+}
+.hero-sub p{transform:translateY(100%)}
+
+.hero-scroll{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-size:9px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:rgba(253,250,246,.35);
+  overflow:hidden;
+}
+.hero-scroll span{transform:translateY(100%);display:block}
+.hero-scroll-line{
+  width:48px;
+  height:1px;
+  background:var(--gold);
+  transform:scaleX(0);
+  transform-origin:left;
+  flex-shrink:0;
+}
+
+/* ─── Slide counter (bottom-right overlay) ─── */
+.hero-counter{
+  position:absolute;
+  bottom:80px;
+  right:60px;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  opacity:0;
+}
+.hero-counter-num{
+  font-family:'Syne',sans-serif;
+  font-size:11px;
+  letter-spacing:.14em;
+  color:rgba(253,250,246,.35);
+  font-variant-numeric:tabular-nums;
+}
+.hero-counter-bar{
+  width:48px;
+  height:1px;
+  background:rgba(255,255,255,.12);
+  position:relative;
+}
+.hero-counter-fill{
+  position:absolute;
+  inset:0;
+  background:var(--gold);
+  transform-origin:left;
+  transform:scaleX(0);
+  transition:transform 3.4s linear;
+}
+
+/* ─── Parallax scroll ─── */
+.hero-bg video,
+.hero-bg .slide{
+  will-change:transform;
+}
+
+
+/* ═══════════════════════════════════════════
+   PRODUCT SECTION — CINEMATIC
+═══════════════════════════════════════════ */
+
+/* ─── Transition bridge hero → products ─── */
+.prod-bridge{
+  height: 10vh;
+  background: linear-gradient(to bottom, transparent, var(--cream));
+  margin-top: -10vh;
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ─── Section wrapper ─── */
+.p-section{ position:relative }
+.p-wrap{
+  /* 5 scroll-heights: 1 entrance + 3 phases + 1 exit */
+  height: 550vh;
+}
+.p-sticky{
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Tinted background per product ─── */
+.p-bg{
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  transition: background .6s ease;
+}
+
+/* ─── Giant ghost number ─── */
+.p-ghost{
+  position: absolute;
+  font-family: 'Syne', sans-serif;
+  font-size: 38vw;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: rgba(42,37,32,.028);
+  bottom: -8%;
+  left: -2%;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ─── IMAGE — the real star ─── */
+.p-img-wrap{
+  position: absolute;
+  /* centered, takes up the viewport focus */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(660px, 56vw);
+  height: min(560px, 62vh);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+.p-img-wrap img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* 3D-feel: layered drop-shadows + warm atmospheric glow */
+  filter:
+    drop-shadow(0 60px 120px rgba(42,37,32,.10))
+    drop-shadow(0 20px 48px  rgba(42,37,32,.08))
+    drop-shadow(0  4px 16px  rgba(42,37,32,.06));
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+}
+
+/* Atmospheric light behind image */
+.p-aura{
+  position: absolute;
+  inset: -40%;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.p-sticky.active .p-aura{ opacity: 1 }
+
+/* ─── Left info panel ─── */
+.p-info{
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 240px;
+  z-index: 10;
+}
+.p-num{
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(80px, 10vw, 124px);
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(42,37,32,.04);
+  margin-bottom: -20px;
+  margin-left: -5px;
+  user-select: none;
+  letter-spacing: -.04em;
+}
+.p-tag{
+  font-size: 9px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.p-name{
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.p-desc{
+  font-size: 13px;
+  line-height: 1.78;
+  color: rgba(42,37,32,.45);
+  max-width: 220px;
+}
+
+/* ─── Right phase panels ─── */
+.p-panels{
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  z-index: 10;
+}
+.p-panel{
+  position: absolute;
+  top: 0; right: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(20px);
+  pointer-events: none;
+  transition: opacity .55s var(--ease-out), transform .55s var(--ease-out);
+}
+.p-panel.on{
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.p-phase-tag{
+  font-size: 9px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.p-phase-big{
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(24px, 2.4vw, 36px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.p-phase-sub{
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  margin-bottom: 14px;
+  opacity: .8;
+}
+.p-phase-body{
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(42,37,32,.46);
+}
+
+/* ─── Dimensions badge (last phase) ─── */
+.p-dims{
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+.p-dims-label{
+  display: block;
+  font-size: 9px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(42,37,32,.32);
+  margin-bottom: 5px;
+}
+.p-dims-val{
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(14px, 1.6vw, 20px);
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: var(--ink);
+}
+
+/* ─── Phase progress bar ─── */
+.p-progress{
+  position: absolute;
+  bottom: 28px;
+  left: 60px; right: 60px;
+}
+.p-prog-track{
+  height: 1px;
+  background: rgba(42,37,32,.1);
+  position: relative;
+  margin-bottom: 10px;
+}
+.p-prog-fill{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--gold), var(--gold2));
+  transform-origin: left;
+  transform: scaleX(0);
+}
+.p-prog-labels{
+  display: flex;
+  justify-content: space-between;
+}
+.p-prog-labels span{
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(42,37,32,.25);
+  transition: color .3s;
+}
+.p-prog-labels span.on{ color: var(--gold) }
+
+/* ─── Transition bridge ─── */
+#process{min-height:100vh;background:var(--cream2)}
+#reservation{min-height:100vh;background:var(--warm)}
+footer{min-height:20vh;background:var(--cream2);border-top:1px solid rgba(42,37,32,.07)}
+
+
+/* ═══════════════════════════════════════════
+   UTIL
+═══════════════════════════════════════════ */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(32px);
+  transition:opacity .9s var(--ease-out),
+             transform .9s var(--ease-out);
+}
+[data-reveal].vis{opacity:1;transform:translateY(0)}
+
+</style>
+</head>
+<body>
+
+<!-- ════ CURSOR ════ -->
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+
+
+<!-- ════ LOADER ════ -->
+<div id="loader">
+  <div class="ld-emblem">
+
+    <div class="ld-wordmark">
+      <span>M</span><span>A</span><span>V</span>&thinsp;&thinsp;
+      <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span>
+    </div>
+
+    <div class="ld-rule" id="ldRule"></div>
+
+    <div class="ld-sub"><span>Handcrafted Luxury · Est. 2018</span></div>
+
+  </div>
+
+  <div class="ld-emblem" style="gap:14px;align-items:center">
+    <div class="ld-bar"><div class="ld-bar-fill" id="ldFill"></div></div>
+    <div class="ld-count" id="ldCount">0</div>
+  </div>
+</div>
+
+
+<!-- ════ NAV ════ -->
+<nav id="nav">
+  <a href="#" class="nav-logo">MAV Studio</a>
+  <ul class="nav-links">
+    <li><a href="#products">Collection</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#reservation">Showroom</a></li>
+  </ul>
+  <a href="#reservation" class="nav-cta">Book Visit</a>
+</nav>
+
+
+<!-- ════ HERO ════ -->
+<section id="hero">
+
+  <!-- Background -->
+  <div class="hero-bg" id="heroBg">
+    <video id="heroVid" autoplay muted playsinline>
+      <source src="I ENEJOYED.mp4" type="video/mp4">
+    </video>
+    <img class="slide" src="hero.jpg"          alt="MAV Studio">
+    <img class="slide" src="히어로버블.jpg"     alt="MELO BUBBLE">
+    <img class="slide" src="히어로 우드.jpg"    alt="MELO WOOD">
+    <img class="slide" src="히어로 라운드.jpg"  alt="MELO ROUND">
+  </div>
+
+  <div class="hero-vig-bottom"></div>
+  <div class="hero-vig-top"></div>
+
+  <!-- Main content -->
+  <div class="hero-content">
+
+    <div class="hero-left">
+      <div class="hero-tag"><span>Handcrafted Luxury &ensp;·&ensp; Est. 2018</span></div>
+      <h1 class="hero-h">
+        <span class="w"><span>Crafted</span></span>
+        <span class="w"><span>for</span></span><br>
+        <span class="w"><span>Those</span></span>
+        <span class="w"><span>Who</span></span><br>
+        <span class="w"><span>Know</span></span>
+      </h1>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-sub">
+        <p>유럽산 원단과 국내 장인의 손길로<br>탄생하는 럭셔리 수제 소파</p>
+      </div>
+      <div class="hero-scroll">
+        <div class="hero-scroll-line" id="hScrollLine"></div>
+        <span>Scroll to explore</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Slide counter -->
+  <div class="hero-counter" id="heroCounter">
+    <div class="hero-counter-num"><span id="cCur">01</span> / <span id="cTot">04</span></div>
+    <div class="hero-counter-bar"><div class="hero-counter-fill" id="cFill"></div></div>
+  </div>
+
+</section>
+
+
+<!-- ════ PRODUCTS ════ -->
+<div class="prod-bridge"></div>
+<div id="products"></div>
+
+<!-- ════ PLACEHOLDER ════ -->
+<section id="process"></section>
+<section id="reservation"></section>
+<footer></footer>
+
+
+<!-- ════ GSAP ════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ──────────────────────────────────────────
+   CURSOR
+────────────────────────────────────────── */
+(function initCursor(){
+  const dot  = document.getElementById('c-dot');
+  const ring = document.getElementById('c-ring');
+  let mx=0, my=0, rx=0, ry=0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    gsap.to(dot, { x:mx, y:my, duration:.06, ease:'none' });
+  });
+
+  (function lerpRing(){
+    rx += (mx-rx) * .095;
+    ry += (my-ry) * .095;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(lerpRing);
+  })();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('c-hov'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('c-hov'));
+  });
+})();
+
+
+/* ──────────────────────────────────────────
+   LOADER
+────────────────────────────────────────── */
+(function initLoader(){
+  document.body.style.overflow = 'hidden';
+
+  const fill  = document.getElementById('ldFill');
+  const count = document.getElementById('ldCount');
+  const rule  = document.getElementById('ldRule');
+
+  let progress = 0;
+  const tick = setInterval(() => {
+    progress = Math.min(progress + Math.random() * 14 + 4, 100);
+    count.textContent = Math.floor(progress);
+    gsap.to(fill, { scaleX: progress/100, duration:.35, ease:'power2.out' });
+    if(progress >= 100){
+      clearInterval(tick);
+      count.textContent = '100';
+    }
+  }, 90);
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      document.body.style.overflow = '';
+      initHero();
+      initNav();
+      initScrollReveal();
+    }
+  });
+
+  /* Wordmark letters stagger */
+  tl.to('.ld-wordmark span', {
+      y: 0, opacity: 1,
+      duration: .55, stagger: .045,
+      ease: 'power3.out'
+    })
+    /* Divider rule */
+    .to(rule, {
+      scaleY: 1,
+      duration: .6,
+      ease: 'power2.inOut'
+    }, '-=.2')
+    /* Sub text */
+    .to('.ld-sub span', {
+      y: 0, opacity: 1,
+      duration: .5,
+      ease: 'power3.out'
+    }, '-=.35')
+    /* Wait for count to finish */
+    .to({}, { duration: 1.2 })
+    /* Fade out loader */
+    .to('#loader', {
+      yPercent: -100,
+      duration: 1.1,
+      ease: 'power4.inOut'
+    })
+    .set('#loader', { display: 'none' });
+})();
+
+
+/* ──────────────────────────────────────────
+   NAV — appear + scroll state
+────────────────────────────────────────── */
+function initNav(){
+  const nav = document.getElementById('nav');
+
+  gsap.to(['.nav-logo', '.nav-links', '.nav-cta'], {
+    opacity: 1,
+    y: 0,
+    duration: .9,
+    stagger: .08,
+    ease: 'power3.out',
+    delay: .1
+  });
+
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+}
+
+
+/* ──────────────────────────────────────────
+   HERO
+────────────────────────────────────────── */
+function initHero(){
+
+  /* ── Video setup ── */
+  const vid    = document.getElementById('heroVid');
+  const slides = Array.from(document.querySelectorAll('.hero-bg .slide'));
+  const counter= document.getElementById('heroCounter');
+  const cCur   = document.getElementById('cCur');
+  const cFill  = document.getElementById('cFill');
+
+  vid.playbackRate = 2;
+  vid.addEventListener('canplay', () => { vid.playbackRate = 2; });
+
+  /* ── Content entrance animation ── */
+  const entrance = gsap.timeline({ delay: .15 });
+
+  /* 1. Video fade in */
+  entrance
+    .to(vid, {
+      opacity: 1,
+      scale: 1,
+      duration: 2.2,
+      ease: 'power2.out'
+    })
+    /* 2. Tag line */
+    .to('.hero-tag span', {
+      y: 0,
+      duration: .9,
+      ease: 'power3.out'
+    }, '-=1.6')
+    /* 3. Headline words — staggered with slight rotation */
+    .to('.hero-h .w span', {
+      y: 0,
+      rotate: 0,
+      duration: 1.1,
+      stagger: .1,
+      ease: 'power4.out'
+    }, '-=1.2')
+    /* 4. Sub text */
+    .to('.hero-sub p', {
+      y: 0,
+      duration: .9,
+      ease: 'power3.out'
+    }, '-=.7')
+    /* 5. Scroll hint */
+    .to('#hScrollLine', {
+      scaleX: 1,
+      duration: .9,
+      ease: 'power2.out'
+    }, '-=.6')
+    .to('.hero-scroll span', {
+      y: 0,
+      duration: .7,
+      ease: 'power3.out'
+    }, '-=.7');
+
+
+  /* ── Slideshow after video ends ── */
+  let curIdx  = -1;
+  let slideTimer = null;
+
+  function setCounter(idx){
+    cCur.textContent = String(idx + 1).padStart(2,'0');
+    /* restart progress bar */
+    gsap.killTweensOf(cFill);
+    gsap.fromTo(cFill, { scaleX:0 }, { scaleX:1, duration:3.4, ease:'none' });
+  }
+
+  function showSlide(idx, instant){
+    const prev = curIdx;
+    curIdx = idx;
+
+    if(prev >= 0){
+      gsap.to(slides[prev], {
+        opacity: 0,
+        scale: 1.03,
+        duration: instant ? 0 : 1.4,
+        ease: 'power2.inOut'
+      });
+    }
+    gsap.to(slides[idx], {
+      opacity: 1,
+      scale: 1,
+      duration: instant ? 0 : 1.6,
+      ease: 'power2.inOut'
+    });
+    setCounter(idx);
+  }
+
+  function startSlideshow(){
+    /* Show counter */
+    gsap.to(counter, { opacity:1, duration:.8, ease:'power2.out' });
+    showSlide(0);
+    let i = 1;
+    slideTimer = setInterval(() => {
+      showSlide(i);
+      i = (i + 1) % slides.length;
+    }, 3600);
+  }
+
+  vid.addEventListener('ended', () => {
+    gsap.to(vid, { opacity:0, scale:1.02, duration:1.4, ease:'power2.inOut' });
+    startSlideshow();
+  });
+
+  /* Fallback: if video can't load */
+  vid.addEventListener('error', () => {
+    gsap.set(vid, { opacity:0 });
+    startSlideshow();
+  });
+
+
+  /* ── Parallax on scroll ── */
+  gsap.to('#heroBg', {
+    yPercent: 18,
+    ease: 'none',
+    scrollTrigger:{
+      trigger: '#hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1
+    }
+  });
+
+  /* Fade out hero content on scroll */
+  gsap.to('.hero-content, .hero-counter', {
+    opacity: 0,
+    y: -30,
+    ease: 'none',
+    scrollTrigger:{
+      trigger: '#hero',
+      start: 'top top',
+      end: '40% top',
+      scrub: 1.2
+    }
+  });
+}
+
+
+/* ──────────────────────────────────────────
+   GENERAL SCROLL REVEAL
+────────────────────────────────────────── */
+function initScrollReveal(){
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 88%',
+      onEnter: () => el.classList.add('vis')
+    });
+  });
+}
+
+
+/* ──────────────────────────────────────────
+   PRODUCTS DATA
+────────────────────────────────────────── */
+const PRODUCTS = [
+  {
+    num: '01', name: 'MELO\nBUBBLE', tag: 'Signature · Full Set',
+    img: 'sofa.jpg', bg: '#F0EBE2',
+    aura: 'rgba(230,210,180,.32)',
+    desc: '유럽산 프리미엄 부클레 원단과\n고밀도 폼의 완성형 4모듈 소파.',
+    dims: 'W 280 × D 96 × H 72 cm',
+    phases: [
+      { tag:'OVERVIEW',  big:'Full\nConfiguration', sub:'4-Module · Full Set',         body:'4개의 모듈이 하나로 이어진 완성형. 공간의 중심을 단번에 잡아줍니다.' },
+      { tag:'FABRIC',    big:'Premium\nBoucle',      sub:'Italy · Belgium · Portugal',  body:'유럽 3국에서 직수입한 부클레 원단. 12가지 컬러, 3가지 소재로 완성됩니다.' },
+      { tag:'DETAIL',    big:'Deep\nCushion',        sub:'75kg/m³ Foam + Down Fill',    body:'고밀도 폼과 다운 필링의 이중 구조로 오래 앉아도 형태가 유지됩니다.' }
+    ],
+    zooms: [ [1.0,'50%','50%'], [1.55,'66%','38%'], [1.9,'34%','62%'] ]
+  },
+  {
+    num: '02', name: 'MELO\nSTONE', tag: 'Organic Form Series',
+    img: 'MELO STONE.jpg', bg: '#ECEAE6',
+    aura: 'rgba(200,195,185,.28)',
+    desc: '자연석에서 영감 받은\n유기적 곡선의 모듈 소파.',
+    dims: 'W 240 × D 90 × H 68 cm',
+    phases: [
+      { tag:'OVERVIEW',  big:'Organic\nSilhouette', sub:'Stone-Inspired Curve',   body:'자연의 곡선이 담긴 실루엣. 공간의 시선을 단번에 사로잡습니다.' },
+      { tag:'FABRIC',    big:'Micro\nVelvet',        sub:'8 Colorways Available',  body:'빛에 따라 달라지는 마이크로벨벳. 섬세한 촉감과 깊이 있는 색감.' },
+      { tag:'DETAIL',    big:'Zero\nGravity',        sub:'Ergonomic Back Support', body:'몸의 곡선을 따라 설계된 등받이. 장시간 착석에도 편안함이 지속됩니다.' }
+    ],
+    zooms: [ [1.0,'50%','50%'], [1.5,'62%','32%'], [1.85,'42%','68%'] ]
+  },
+  {
+    num: '03', name: 'MELO\nROUND', tag: 'Circular Form Series',
+    img: 'MELO ROUND.jpg', bg: '#EBE8E3',
+    aura: 'rgba(210,200,185,.28)',
+    desc: '원형의 완성미.\n어디서든 존재감을 발하는 소파.',
+    dims: 'Ø 180 × H 72 cm',
+    phases: [
+      { tag:'OVERVIEW',  big:'Pure\nCircle',    sub:'360° Seating Experience', body:'사방에서 앉을 수 있는 원형 구조. 리빙·상업 공간 모두 어울립니다.' },
+      { tag:'FABRIC',    big:'Natural\nLinen',   sub:'6 Earth-Tone Colors',     body:'천연 리넨 원단의 자연스러운 질감. 시간이 지날수록 더 아름다워집니다.' },
+      { tag:'DETAIL',    big:'Seamless\nFinish', sub:'No Front or Back',        body:'앞뒤 구분 없는 완벽한 마감. 어느 각도에서도 하나의 오브제로 완성됩니다.' }
+    ],
+    zooms: [ [1.0,'50%','50%'], [1.55,'55%','30%'], [2.0,'50%','62%'] ]
+  },
+  {
+    num: '04', name: 'MELO\nBOX', tag: 'Structured Form Series',
+    img: 'MELO BOX.jpg', bg: '#E8E5DF',
+    aura: 'rgba(195,188,178,.28)',
+    desc: '절제된 직선미.\n모던한 공간에 품격을 더합니다.',
+    dims: 'W 260 × D 88 × H 74 cm',
+    phases: [
+      { tag:'OVERVIEW',  big:'Sharp\nGeometry',     sub:'Structured · Minimal',         body:'각진 실루엣과 깊은 쿠션의 대비. 시각적 긴장감이 공간을 완성합니다.' },
+      { tag:'FABRIC',    big:'Performance\nBoucle', sub:'Stain-Resistant Finish',        body:'내구성을 높인 퍼포먼스 부클레. 오염에 강하고 관리가 쉽습니다.' },
+      { tag:'DETAIL',    big:'Steel\nFrame',         sub:'Hidden Powder-Coat Structure', body:'파우더코팅 스틸 내부 프레임. 반영구적인 구조 강성을 보장합니다.' }
+    ],
+    zooms: [ [1.0,'50%','50%'], [1.5,'65%','38%'], [1.8,'34%','68%'] ]
+  },
+  {
+    num: '05', name: 'MELO\nWOOD', tag: 'Natural Material Series',
+    img: 'MELO WOOD.jpg', bg: '#E6E2DC',
+    aura: 'rgba(195,185,170,.28)',
+    desc: '원목 레그와 패브릭의 만남.\n따뜻함과 세련미를 동시에.',
+    dims: 'W 220 × D 86 × H 76 cm',
+    phases: [
+      { tag:'OVERVIEW',  big:'Wood &\nFabric',   sub:'Natural Material Pairing', body:'원목의 따뜻함과 패브릭의 부드러움. 자연 소재 인테리어와 완벽한 조화.' },
+      { tag:'FABRIC',    big:'Chenille\nWeave',  sub:'Handwoven · 10 Colors',    body:'수작업으로 짠 쉐닐 원단. 독특한 질감이 공간에 깊이를 더합니다.' },
+      { tag:'DETAIL',    big:'White Oak\nLeg',   sub:'FSC-Certified · Wax Oil',  body:'친환경 FSC 인증 화이트 오크 원목 레그. 왁스 오일 마감으로 영구 보존.' }
+    ],
+    zooms: [ [1.0,'50%','50%'], [1.5,'45%','34%'], [2.0,'58%','70%'] ]
+  }
+];
+
+
+/* ──────────────────────────────────────────
+   BUILD + ANIMATE PRODUCTS
+────────────────────────────────────────── */
+(function initProducts(){
+
+  const container = document.getElementById('products');
+  const lerp  = (a, b, t) => a + (b - a) * t;
+  const easeIO= t => t < .5 ? 2*t*t : -1 + (4 - 2*t)*t;
+
+  PRODUCTS.forEach((p, pi) => {
+
+    /* ── Build HTML ── */
+    const section = document.createElement('section');
+    section.className = 'p-section';
+
+    const nameHtml = p.name.replace('\n','<br>');
+    const descHtml = p.desc.replace('\n','<br>');
+
+    section.innerHTML = `
+      <div class="p-wrap" id="pw${pi}">
+        <div class="p-sticky" id="ps${pi}">
+
+          <div class="p-bg" id="pb${pi}" style="background:${p.bg}"></div>
+
+          <div class="p-ghost">${p.num}</div>
+
+          <!-- Image -->
+          <div class="p-img-wrap" id="piw${pi}">
+            <div class="p-aura" id="pa${pi}"
+              style="background:radial-gradient(circle, ${p.aura} 0%, transparent 65%)"></div>
+            <img id="pi${pi}" src="${p.img}" alt="${p.name.replace('\n',' ')}"
+              onerror="this.style.opacity='.06'">
+          </div>
+
+          <!-- Left info -->
+          <div class="p-info">
+            <div class="p-num">${p.num}</div>
+            <div class="p-tag">${p.tag}</div>
+            <h2 class="p-name">${nameHtml}</h2>
+            <p class="p-desc">${descHtml}</p>
+          </div>
+
+          <!-- Right phase panels -->
+          <div class="p-panels" id="ppp${pi}">
+            ${p.phases.map((ph, i) => `
+              <div class="p-panel${i===0?' on':''}" id="pp${pi}_${i}">
+                <div class="p-phase-tag">${ph.tag}</div>
+                <div class="p-phase-big">${ph.big.replace('\n','<br>')}</div>
+                <div class="p-phase-sub">${ph.sub}</div>
+                <div class="p-phase-body">${ph.body}</div>
+              </div>`).join('')}
+          </div>
+
+          <!-- Dimensions -->
+          <div class="p-dims" id="pd${pi}">
+            <span class="p-dims-label">Dimensions</span>
+            <span class="p-dims-val">${p.dims}</span>
+          </div>
+
+          <!-- Progress -->
+          <div class="p-progress">
+            <div class="p-prog-track">
+              <div class="p-prog-fill" id="ppf${pi}"></div>
+            </div>
+            <div class="p-prog-labels" id="ppl${pi}">
+              ${p.phases.map(ph => `<span>${ph.tag}</span>`).join('')}
+              <span>RESERVE</span>
+            </div>
+          </div>
+
+        </div>
+      </div>`;
+
+    container.appendChild(section);
+
+    /* ── References ── */
+    const wrapper  = document.getElementById(`pw${pi}`);
+    const sticky   = document.getElementById(`ps${pi}`);
+    const img      = document.getElementById(`pi${pi}`);
+    const aura     = document.getElementById(`pa${pi}`);
+    const dims     = document.getElementById(`pd${pi}`);
+    const progFill = document.getElementById(`ppf${pi}`);
+    const labels   = document.getElementById(`ppl${pi}`).querySelectorAll('span');
+    const panels   = sticky.querySelectorAll('.p-panel');
+    const N = p.phases.length;
+    let lastPh = -1;
+
+    /* ── ScrollTrigger ── */
+    ScrollTrigger.create({
+      trigger: wrapper,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1.6,
+
+      onEnter(){ sticky.classList.add('active') },
+      onLeaveBack(){ sticky.classList.remove('active') },
+
+      onUpdate(self){
+        const prog = self.progress;
+
+        /* Progress bar */
+        progFill.style.transform = `scaleX(${prog})`;
+
+        /* Phase index */
+        const raw    = prog * N;
+        const phIdx  = Math.min(Math.floor(raw), N - 1);
+        const phLocal= easeIO(Math.min(raw - phIdx, 1));
+
+        /* Progress labels */
+        const lblIdx = Math.min(Math.floor(prog * (N + 1)), N);
+        labels.forEach((l, i) => l.classList.toggle('on', i === lblIdx));
+
+        /* Phase panel swap */
+        if(phIdx !== lastPh){
+          panels.forEach((panel, i) => panel.classList.toggle('on', i === phIdx));
+          lastPh = phIdx;
+        }
+
+        /* Zoom + pan */
+        const z0 = p.zooms[phIdx];
+        const z1 = p.zooms[Math.min(phIdx + 1, N - 1)];
+        const scale = lerp(z0[0], z1[0], phLocal);
+        const ox    = lerp(parseFloat(z0[1]), parseFloat(z1[1]), phLocal);
+        const oy    = lerp(parseFloat(z0[2]), parseFloat(z1[2]), phLocal);
+        img.style.transformOrigin = `${ox}% ${oy}%`;
+        img.style.transform = `scale(${scale})`;
+
+        /* Drop-shadow intensifies as zoom increases */
+        const s = (scale - 1) / 1.2;
+        const sh1 = 60 + s * 60,  op1 = 0.10 + s * 0.08;
+        const sh2 = 20 + s * 28,  op2 = 0.08 + s * 0.06;
+        img.style.filter =
+          `drop-shadow(0 ${sh1}px ${sh1*2}px rgba(42,37,32,${op1.toFixed(2)}))` +
+          ` drop-shadow(0 ${sh2}px ${sh2*2}px rgba(42,37,32,${op2.toFixed(2)}))` +
+          ` drop-shadow(0 4px 16px rgba(42,37,32,.05))`;
+
+        /* Aura light follows zoom point */
+        aura.style.background =
+          `radial-gradient(circle at ${ox}% ${oy}%, ${p.aura} 0%, transparent 60%)`;
+
+        /* Dimensions badge fade in at last phase */
+        const dimProg = Math.max(0, Math.min(1, (prog - (N-1)/N) / (1/N) * 1.8));
+        dims.style.opacity   = dimProg;
+        dims.style.transform = `translateX(-50%) translateY(${(1 - dimProg) * 14}px)`;
+      }
+    });
+
+    /* ── Image entrance (section scrolls in) ── */
+    gsap.fromTo(img,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out',
+        scrollTrigger:{ trigger: wrapper, start: 'top 85%' }
+      }
+    );
+
+  });
+
+})();
+
+</script>
+</body>
+</html>

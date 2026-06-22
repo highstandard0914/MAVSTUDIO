@@ -1,0 +1,42 @@
+<!--@layout(/layout/basic/layout.html)-->
+<div class="main-visual-container" style="position: relative; width: 100%; min-height: 100vh; background-color: #f2ede4; overflow: hidden; display: flex; align-items: center; justify-content: center;" data-ez="module-05we4p4-1" data-ez-module="user-defined/1" data-ez-name="USER DEFINED" data-ez-type="plain">
+    <img src="/web/upload/min-vi.jpg" alt="Villion Main Visual" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;" loading="lazy" ez-prevent="img">
+    
+    <div class="hero-text-bounds" style="position: relative; z-index: 2; text-align: center; color: #000; max-width: 800px; padding: 0 20px; font-family: 'Helvetica Neue', Arial, sans-serif; margin-top: 100px;">
+        <p class="collection-title" style="font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; opacity: 0.8;">COLLECTION 01 — 2026</p>
+        <h1 class="main-statement" style="font-size: 72px; font-weight: 300; letter-spacing: 6px; line-height: 1.1; text-transform: uppercase; margin-bottom: 40px;">THE ART OF<br>RESTRAINT</h1>
+        <p class="sub-statement" style="font-size: 16px; font-weight: 300; line-height: 1.8; max-width: 520px; margin: 0 auto 50px; opacity: 0.9; letter-spacing: 0.5px;">A study in proportion and silence — Villion's debut collection is shaped by the discipline of removing everything that is not essential.</p>
+        <a href="/product/list.html" class="shop-now-btn" style="display: inline-block; padding: 15px 45px; border: 1px solid #000; background: transparent; color: #000; text-decoration: none; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; transition: all 0.3s ease;">SHOP NOW</a>
+    </div>
+</div>
+<div class="main-products-section" style="padding: 100px 40px; background-color: #fff;" data-ez="contents-0692ifk-1">
+    <div module="product_listmain_1">
+        <!--
+            $count = 8
+            $cb_module_use = 1
+        -->
+        <ul class="prdList" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 20px; list-style: none; padding: 0; margin: 0;">
+            <li id="anchorBoxId_{$product_no}" style="position: relative; display: flex; flex-direction: column;">
+                <div class="thumbnail" style="margin-bottom: 15px; overflow: hidden; background-color: #f9f9f9;">
+                    <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_text}" style="width: 100%; height: auto; display: block;" loading="lazy" ez-prevent="img"></a>
+                </div>
+                <div class="description" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; letter-spacing: 0.5px; line-height: 1.5;">
+                    <strong class="name" style="display: block; font-weight: 400; margin-bottom: 5px;"><a href="{$link_product_detail}" style="color: #000; text-decoration: none;">{$product_name}</a></strong>
+                    <span class="price" style="display: block; font-weight: 300; color: #111;">{$product_custom} {$custom_string}</span>
+                    <span class="sale-price" style="display: block; font-weight: 400; color: #000; margin-top: 2px;">{$product_price}</span>
+                </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}" style="position: relative; display: flex; flex-direction: column;">
+                <div class="thumbnail" style="margin-bottom: 15px; overflow: hidden; background-color: #f9f9f9;">
+                    <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_text}" style="width: 100%; height: auto; display: block;" loading="lazy" ez-prevent="img"></a>
+                </div>
+                <div class="description" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; letter-spacing: 0.5px; line-height: 1.5;">
+                    <strong class="name" style="display: block; font-weight: 400; margin-bottom: 5px;"><a href="{$link_product_detail}" style="color: #000; text-decoration: none;">{$product_name}</a></strong>
+                    <span class="price" style="display: block; font-weight: 300; color: #111;">{$product_custom} {$custom_string}</span>
+                    <span class="sale-price" style="display: block; font-weight: 400; color: #000; margin-top: 2px;">{$product_price}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--#ez="1/1"-->
