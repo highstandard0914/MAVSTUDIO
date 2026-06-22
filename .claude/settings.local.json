@@ -75,7 +75,12 @@
       "PowerShell(node --version)",
       "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
       "Bash(timeout 2)",
-      "Bash(curl -s http://localhost:8124/mavstudio.html)"
+      "Bash(curl -s http://localhost:8124/mavstudio.html)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }
