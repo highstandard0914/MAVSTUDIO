@@ -3,1328 +3,1010 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MAV STUDIO — Handcrafted Luxury Sofas</title>
+<title>MAV STUDIO | 마브 스튜디오</title>
+<meta name="description" content="유럽산 원단과 부자재로 제작하는 프리미엄 맞춤 소파, MAV STUDIO">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=Pretendard:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-/* ═══════════════════════════════════════════
-   RESET & ROOT
-═══════════════════════════════════════════ */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-
-:root{
-  /* Palette — Light tone */
-  --ink:    #2A2520;   /* 헤드라인 등 진한 텍스트 */
-  --ink2:   #3D3630;
-  --ink3:   #5A524A;
-  --cream:  #FAF7F2;   /* 페이지 기본 배경 */
-  --cream2: #F2EDE4;   /* 섹션 구분 배경 */
-  --warm:   #FFFFFF;
-  --gold:   #A07840;   /* 밝은 배경 위에서 더 진한 골드 */
-  --gold2:  #C49A5A;
-  --sand:   #8C7B68;
-
-  /* Type scale */
-  --f-xs:  10px;
-  --f-sm:  13px;
-  --f-md:  15px;
-
-  /* Easing */
-  --ease-out: cubic-bezier(.22,1,.36,1);
-  --ease-in-out: cubic-bezier(.76,0,.24,1);
-}
-
-html{scroll-behavior:auto;-webkit-font-smoothing:antialiased}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--cream);
-  color:var(--ink);
-  overflow-x:hidden;
-  cursor:none;
-}
-
-
-/* ═══════════════════════════════════════════
-   CUSTOM CURSOR
-═══════════════════════════════════════════ */
-#c-dot{
-  position:fixed;
-  width:6px; height:6px;
-  background:var(--gold);
-  border-radius:50%;
-  pointer-events:none;
-  z-index:9999;
-  transform:translate(-50%,-50%);
-  transition:width .3s var(--ease-out),
-             height .3s var(--ease-out),
-             background .3s;
-}
-#c-ring{
-  position:fixed;
-  width:36px; height:36px;
-  border:1px solid rgba(184,146,90,.35);
-  border-radius:50%;
-  pointer-events:none;
-  z-index:9998;
-  transform:translate(-50%,-50%);
-  transition:opacity .3s, border-color .3s;
-}
-body.c-hov #c-dot{
-  width:48px; height:48px;
-  background:rgba(184,146,90,.12);
-  border:1px solid rgba(184,146,90,.4);
-}
-body.c-hov #c-ring{opacity:0}
-
-
-/* ═══════════════════════════════════════════
-   LOADER
-═══════════════════════════════════════════ */
-#loader{
-  position:fixed;
-  inset:0;
-  background:var(--cream);
-  z-index:2000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:48px;
-  overflow:hidden;
-}
-
-#loader::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:radial-gradient(ellipse 60% 60% at 50% 50%,
-    rgba(160,120,64,.06) 0%,
-    transparent 70%);
-  pointer-events:none;
-}
-
-.ld-emblem{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:20px;
-}
-
-.ld-wordmark{
-  font-family:'Syne',sans-serif;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.65em;
-  text-transform:uppercase;
-  color:var(--ink);
-  overflow:hidden;
-  line-height:1;
-}
-.ld-wordmark span{
-  display:inline-block;
-  transform:translateY(110%);
-  opacity:0;
-}
-
-.ld-rule{
-  width:1px;
-  height:28px;
-  background:linear-gradient(to bottom, transparent, rgba(160,120,64,.4), transparent);
-  transform:scaleY(0);
-  transform-origin:top;
-}
-
-.ld-sub{
-  font-size:9px;
-  letter-spacing:.42em;
-  text-transform:uppercase;
-  color:rgba(42,37,32,.32);
-  overflow:hidden;
-  line-height:1;
-}
-.ld-sub span{
-  display:block;
-  transform:translateY(100%);
-  opacity:0;
-}
-
-.ld-bar{
-  width:160px;
-  height:1px;
-  background:rgba(42,37,32,.1);
-  overflow:hidden;
-  position:relative;
-}
-.ld-bar-fill{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to right, var(--gold), var(--gold2));
-  transform:scaleX(0);
-  transform-origin:left;
-}
-
-.ld-count{
-  font-family:'Syne',sans-serif;
-  font-size:11px;
-  letter-spacing:.2em;
-  color:rgba(160,120,64,.6);
-  font-variant-numeric:tabular-nums;
-}
-
-
-/* ═══════════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════════ */
-#nav{
-  position:fixed;
-  top:0; left:0; right:0;
-  z-index:800;
-  padding:32px 60px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  /* Glass nav — fills in after scroll */
-  transition:padding .6s var(--ease-out),
-             background .5s,
-             backdrop-filter .5s;
-}
-#nav.scrolled{
-  padding:20px 60px;
-  background:rgba(250,247,242,.88);
-  backdrop-filter:blur(20px) saturate(1.6);
-  border-bottom:1px solid rgba(42,37,32,.07);
-}
-
-.nav-logo{
-  font-family:'Syne',sans-serif;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.52em;
-  text-transform:uppercase;
-  color:var(--ink);
-  text-decoration:none;
-  opacity:0;
-  transform:translateY(-12px);
-}
-
-/* Hero 위에서는 white, 스크롤 후 dark */
-#nav:not(.scrolled) .nav-logo{ color:var(--warm) }
-#nav:not(.scrolled) .nav-links a{ color:rgba(255,255,255,.55) }
-#nav:not(.scrolled) .nav-links a:hover{ color:#fff }
-#nav:not(.scrolled) .nav-cta{ color:#fff; border-color:rgba(255,255,255,.28) }
-
-.nav-links{
-  display:flex;
-  gap:40px;
-  list-style:none;
-  opacity:0;
-  transform:translateY(-12px);
-}
-.nav-links a{
-  font-size:10px;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color:rgba(42,37,32,.5);
-  text-decoration:none;
-  transition:color .4s;
-  position:relative;
-}
-.nav-links a::after{
-  content:'';
-  position:absolute;
-  bottom:-3px; left:0; right:0;
-  height:1px;
-  background:var(--gold);
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:transform .4s var(--ease-out);
-}
-.nav-links a:hover{ color:var(--ink) }
-.nav-links a:hover::after{ transform:scaleX(1) }
-
-.nav-cta{
-  font-size:10px;
-  letter-spacing:.24em;
-  text-transform:uppercase;
-  color:var(--ink);
-  border:1px solid rgba(42,37,32,.22);
-  padding:11px 24px;
-  text-decoration:none;
-  opacity:0;
-  transform:translateY(-12px);
-  transition:background .4s, border-color .4s, color .4s;
-}
-.nav-cta:hover{
-  background:var(--gold);
-  border-color:var(--gold);
-  color:#fff;
-}
-
-
-/* ═══════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════ */
-#hero{
-  height:100vh;
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:0 60px 80px;
-}
-
-/* ─── Background ─── */
-.hero-bg{
-  position:absolute;
-  inset:0;
-  z-index:0;
-}
-.hero-bg video{
-  position:absolute;
-  inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  opacity:0;
-  transform:scale(1.06);
-  will-change:opacity,transform;
-}
-.hero-bg .slide{
-  position:absolute;
-  inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  opacity:0;
-  transform:scale(1.06);
-  will-change:opacity,transform;
-}
-
-/* ─── Vignette layers ─── */
-.hero-vig-bottom{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  background:linear-gradient(
-    to top,
-    rgba(8,6,4,.65)    0%,
-    rgba(8,6,4,.22)    35%,
-    rgba(8,6,4,.04)    65%,
-    transparent        100%
-  );
-  pointer-events:none;
-}
-.hero-vig-top{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  background:linear-gradient(
-    to bottom,
-    rgba(8,6,4,.28)    0%,
-    transparent        38%
-  );
-  pointer-events:none;
-}
-
-/* ─── Content ─── */
-.hero-content{
-  position:relative;
-  z-index:2;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-}
-
-/* Eyebrow */
-.hero-tag{
-  font-size:10px;
-  letter-spacing:.48em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:28px;
-  overflow:hidden;
-  line-height:1;
-}
-.hero-tag span{
-  display:block;
-  transform:translateY(110%);
-}
-
-/* Headline */
-.hero-h{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(40px,5.2vw,86px);
-  font-weight:800;
-  line-height:.90;
-  letter-spacing:-.025em;
-  text-transform:uppercase;
-  color:var(--warm);
-  margin-bottom:40px;
-}
-/* Each word wrapped in .w > span for reveal */
-.hero-h .w{
-  display:inline-block;
-  overflow:hidden;
-  margin-right:.1em;
-}
-.hero-h .w span{
-  display:block;
-  transform:translateY(105%) rotate(1.5deg);
-  transform-origin:bottom left;
-}
-
-/* Left block */
-.hero-left{}
-
-/* Right block */
-.hero-right{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:20px;
-  padding-bottom:6px;
-}
-
-.hero-sub{
-  font-size:13px;
-  line-height:1.9;
-  color:rgba(253,250,246,.55);
-  text-align:right;
-  max-width:260px;
-  overflow:hidden;
-}
-.hero-sub p{transform:translateY(100%)}
-
-.hero-scroll{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  font-size:9px;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-  color:rgba(253,250,246,.35);
-  overflow:hidden;
-}
-.hero-scroll span{transform:translateY(100%);display:block}
-.hero-scroll-line{
-  width:48px;
-  height:1px;
-  background:var(--gold);
-  transform:scaleX(0);
-  transform-origin:left;
-  flex-shrink:0;
-}
-
-/* ─── Slide counter (bottom-right overlay) ─── */
-.hero-counter{
-  position:absolute;
-  bottom:80px;
-  right:60px;
-  z-index:3;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  opacity:0;
-}
-.hero-counter-num{
-  font-family:'Syne',sans-serif;
-  font-size:11px;
-  letter-spacing:.14em;
-  color:rgba(253,250,246,.35);
-  font-variant-numeric:tabular-nums;
-}
-.hero-counter-bar{
-  width:48px;
-  height:1px;
-  background:rgba(255,255,255,.12);
-  position:relative;
-}
-.hero-counter-fill{
-  position:absolute;
-  inset:0;
-  background:var(--gold);
-  transform-origin:left;
-  transform:scaleX(0);
-  transition:transform 3.4s linear;
-}
-
-/* ─── Parallax scroll ─── */
-.hero-bg video,
-.hero-bg .slide{
-  will-change:transform;
-}
-
-
-/* ═══════════════════════════════════════════
-   PRODUCT SECTION — CINEMATIC
-═══════════════════════════════════════════ */
-
-/* ─── Transition bridge hero → products ─── */
-.prod-bridge{
-  height: 10vh;
-  background: linear-gradient(to bottom, transparent, var(--cream));
-  margin-top: -10vh;
-  position: relative;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* ─── Section wrapper ─── */
-.p-section{ position:relative }
-.p-wrap{
-  /* 5 scroll-heights: 1 entrance + 3 phases + 1 exit */
-  height: 550vh;
-}
-.p-sticky{
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ─── Tinted background per product ─── */
-.p-bg{
-  position: absolute;
-  inset: 0;
-  opacity: 1;
-  transition: background .6s ease;
-}
-
-/* ─── Giant ghost number ─── */
-.p-ghost{
-  position: absolute;
-  font-family: 'Syne', sans-serif;
-  font-size: 38vw;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -.04em;
-  color: rgba(42,37,32,.028);
-  bottom: -8%;
-  left: -2%;
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
-}
-
-/* ─── IMAGE — the real star ─── */
-.p-img-wrap{
-  position: absolute;
-  /* centered, takes up the viewport focus */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(660px, 56vw);
-  height: min(560px, 62vh);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-}
-.p-img-wrap img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  /* 3D-feel: layered drop-shadows + warm atmospheric glow */
-  filter:
-    drop-shadow(0 60px 120px rgba(42,37,32,.10))
-    drop-shadow(0 20px 48px  rgba(42,37,32,.08))
-    drop-shadow(0  4px 16px  rgba(42,37,32,.06));
-  transform-origin: 50% 50%;
-  will-change: transform, filter;
-}
-
-/* Atmospheric light behind image */
-.p-aura{
-  position: absolute;
-  inset: -40%;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-.p-sticky.active .p-aura{ opacity: 1 }
-
-/* ─── Left info panel ─── */
-.p-info{
-  position: absolute;
-  left: 60px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 240px;
-  z-index: 10;
-}
-.p-num{
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(80px, 10vw, 124px);
-  font-weight: 800;
-  line-height: 1;
-  color: rgba(42,37,32,.04);
-  margin-bottom: -20px;
-  margin-left: -5px;
-  user-select: none;
-  letter-spacing: -.04em;
-}
-.p-tag{
-  font-size: 9px;
-  letter-spacing: .4em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 10px;
-}
-.p-name{
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(28px, 3vw, 44px);
-  font-weight: 700;
-  line-height: 1.0;
-  color: var(--ink);
-  margin-bottom: 14px;
-}
-.p-desc{
-  font-size: 13px;
-  line-height: 1.78;
-  color: rgba(42,37,32,.45);
-  max-width: 220px;
-}
-
-/* ─── Right phase panels ─── */
-.p-panels{
-  position: absolute;
-  right: 60px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 260px;
-  z-index: 10;
-}
-.p-panel{
-  position: absolute;
-  top: 0; right: 0;
-  width: 100%;
-  opacity: 0;
-  transform: translateX(20px);
-  pointer-events: none;
-  transition: opacity .55s var(--ease-out), transform .55s var(--ease-out);
-}
-.p-panel.on{
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-.p-phase-tag{
-  font-size: 9px;
-  letter-spacing: .4em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-}
-.p-phase-big{
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(24px, 2.4vw, 36px);
-  font-weight: 700;
-  line-height: 1.05;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
-.p-phase-sub{
-  font-size: 10px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--gold2);
-  margin-bottom: 14px;
-  opacity: .8;
-}
-.p-phase-body{
-  font-size: 13px;
-  line-height: 1.8;
-  color: rgba(42,37,32,.46);
-}
-
-/* ─── Dimensions badge (last phase) ─── */
-.p-dims{
-  position: absolute;
-  bottom: 72px;
-  left: 50%;
-  transform: translateX(-50%) translateY(12px);
-  text-align: center;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-}
-.p-dims-label{
-  display: block;
-  font-size: 9px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: rgba(42,37,32,.32);
-  margin-bottom: 5px;
-}
-.p-dims-val{
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(14px, 1.6vw, 20px);
-  font-weight: 600;
-  letter-spacing: .1em;
-  color: var(--ink);
-}
-
-/* ─── Phase progress bar ─── */
-.p-progress{
-  position: absolute;
-  bottom: 28px;
-  left: 60px; right: 60px;
-}
-.p-prog-track{
-  height: 1px;
-  background: rgba(42,37,32,.1);
-  position: relative;
-  margin-bottom: 10px;
-}
-.p-prog-fill{
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, var(--gold), var(--gold2));
-  transform-origin: left;
-  transform: scaleX(0);
-}
-.p-prog-labels{
-  display: flex;
-  justify-content: space-between;
-}
-.p-prog-labels span{
-  font-size: 9px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: rgba(42,37,32,.25);
-  transition: color .3s;
-}
-.p-prog-labels span.on{ color: var(--gold) }
-
-/* ─── Transition bridge ─── */
-#process{min-height:100vh;background:var(--cream2)}
-#reservation{min-height:100vh;background:var(--warm)}
-footer{min-height:20vh;background:var(--cream2);border-top:1px solid rgba(42,37,32,.07)}
-
-
-/* ═══════════════════════════════════════════
-   UTIL
-═══════════════════════════════════════════ */
-[data-reveal]{
-  opacity:0;
-  transform:translateY(32px);
-  transition:opacity .9s var(--ease-out),
-             transform .9s var(--ease-out);
-}
-[data-reveal].vis{opacity:1;transform:translateY(0)}
-
-</style>
-</head>
-<body>
-
-<!-- ════ CURSOR ════ -->
-<div id="c-dot"></div>
-<div id="c-ring"></div>
-
-
-<!-- ════ LOADER ════ -->
-<div id="loader">
-  <div class="ld-emblem">
-
-    <div class="ld-wordmark">
-      <span>M</span><span>A</span><span>V</span>&thinsp;&thinsp;
-      <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span>
-    </div>
-
-    <div class="ld-rule" id="ldRule"></div>
-
-    <div class="ld-sub"><span>Handcrafted Luxury · Est. 2018</span></div>
-
-  </div>
-
-  <div class="ld-emblem" style="gap:14px;align-items:center">
-    <div class="ld-bar"><div class="ld-bar-fill" id="ldFill"></div></div>
-    <div class="ld-count" id="ldCount">0</div>
-  </div>
-</div>
-
-
-<!-- ════ NAV ════ -->
-<nav id="nav">
-  <a href="#" class="nav-logo">MAV Studio</a>
-  <ul class="nav-links">
-    <li><a href="#products">Collection</a></li>
-    <li><a href="#process">Process</a></li>
-    <li><a href="#reservation">Showroom</a></li>
-  </ul>
-  <a href="#reservation" class="nav-cta">Book Visit</a>
-</nav>
-
-
-<!-- ════ HERO ════ -->
-<section id="hero">
-
-  <!-- Background -->
-  <div class="hero-bg" id="heroBg">
-    <video id="heroVid" autoplay muted playsinline>
-      <source src="I ENEJOYED.mp4" type="video/mp4">
-    </video>
-    <img class="slide" src="hero.jpg"          alt="MAV Studio">
-    <img class="slide" src="히어로버블.jpg"     alt="MELO BUBBLE">
-    <img class="slide" src="히어로 우드.jpg"    alt="MELO WOOD">
-    <img class="slide" src="히어로 라운드.jpg"  alt="MELO ROUND">
-  </div>
-
-  <div class="hero-vig-bottom"></div>
-  <div class="hero-vig-top"></div>
-
-  <!-- Main content -->
-  <div class="hero-content">
-
-    <div class="hero-left">
-      <div class="hero-tag"><span>Handcrafted Luxury &ensp;·&ensp; Est. 2018</span></div>
-      <h1 class="hero-h">
-        <span class="w"><span>Crafted</span></span>
-        <span class="w"><span>for</span></span><br>
-        <span class="w"><span>Those</span></span>
-        <span class="w"><span>Who</span></span><br>
-        <span class="w"><span>Know</span></span>
-      </h1>
-    </div>
-
-    <div class="hero-right">
-      <div class="hero-sub">
-        <p>유럽산 원단과 국내 장인의 손길로<br>탄생하는 럭셔리 수제 소파</p>
-      </div>
-      <div class="hero-scroll">
-        <div class="hero-scroll-line" id="hScrollLine"></div>
-        <span>Scroll to explore</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Slide counter -->
-  <div class="hero-counter" id="heroCounter">
-    <div class="hero-counter-num"><span id="cCur">01</span> / <span id="cTot">04</span></div>
-    <div class="hero-counter-bar"><div class="hero-counter-fill" id="cFill"></div></div>
-  </div>
-
-</section>
-
-
-<!-- ════ PRODUCTS ════ -->
-<div class="prod-bridge"></div>
-<div id="products"></div>
-
-<!-- ════ PLACEHOLDER ════ -->
-<section id="process"></section>
-<section id="reservation"></section>
-<footer></footer>
-
-
-<!-- ════ GSAP ════ -->
+<script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#FFFFFF;
+    color:#1A1714;
+    font-family:'Pretendard', -apple-system, sans-serif;
+    overflow-x:hidden;
+  }
+  a { color:inherit; text-decoration:none; }
+  img { display:block; max-width:100%; }
+  ::selection { background:#1A1714; color:#EFEDEA; }
+
+  /* ============ HEADER — mix-blend-mode:difference ============ */
+  .site-header {
+    position:fixed; top:0; left:0; width:100%; z-index:100;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center; column-gap:20px;
+    padding:28px 5vw;
+    color:#fff;
+    mix-blend-mode:difference;
+  }
+  .site-header nav { justify-self:center; display:flex; gap:36px; }
+  .site-header .book { justify-self:end; }
+
+  /* ============ LOGO — a real brand-colored image (gray/orange), so it
+     CANNOT live inside .site-header: mix-blend-mode on an element blends
+     that element's entire painted output (including all descendants) as one
+     unit against the backdrop, and isolation on a child doesn't exempt it
+     from an ancestor's blend mode — only from blending among its own
+     descendants. The fix is structural: render the logo as a separate fixed
+     sibling, positioned to land in the header's reserved left column, so it
+     paints normally (true colors) on top of the page instead of inverting
+     against whatever scrolls underneath. ============ */
+  .site-logo { position:fixed; top:0; left:0; z-index:101; padding:28px 5vw; }
+  .site-logo img { height:22px; display:block; }
+  .site-header nav a { font-size:13px; letter-spacing:1px; position:relative; }
+  .site-header nav a::after {
+    content:''; position:absolute; left:0; bottom:-5px; width:100%; height:1px;
+    background:#fff; transform:scaleX(0); transform-origin:right; transition:transform .4s cubic-bezier(.65,0,.35,1);
+  }
+  .site-header nav a:hover::after { transform:scaleX(1); transform-origin:left; }
+  @media (max-width:860px){ .site-header nav{ display:none; } }
+
+  /* ============ QUICK BAR — every key action (예약/상담/홈페이지) as one
+     always-visible, equally-scannable row, in priority order, mirroring the
+     plain button-list link-in-bio page this site is replacing. It used to be
+     split between a header CTA (top-right, easy to miss against the hero
+     video) and a bottom-right floating stack (small, low-commitment) — that
+     split is exactly what felt unclear, so this consolidates both into one
+     row people see the instant the page loads, with no scrolling required.
+     A separate fixed element (not inside .site-header) because the header's
+     mix-blend-mode:difference would invert these buttons' real colors. */
+  .quick-bar {
+    position:fixed; top:0; left:0; width:100%; z-index:101;
+    display:flex; justify-content:center; align-items:center; gap:10px;
+    padding:24px 5vw; min-height:76px;
+    pointer-events:none; /* row wrapper only positions things; clicks pass through the gaps */
+  }
+  .quick-bar > a { pointer-events:auto; }
+  .quick-bar > a {
+    display:flex; align-items:center; gap:7px;
+    font-size:12.5px; font-weight:600; letter-spacing:0.2px;
+    padding:11px 18px; border-radius:999px;
+    box-shadow:0 6px 20px rgba(26,23,20,0.16);
+    transition:transform .3s cubic-bezier(.16,1,.3,1);
+    backdrop-filter:blur(6px);
+  }
+  .quick-bar > a:hover { transform:translateY(-2px); }
+  /* 예약 — highest priority, so it's the only solid-filled, largest pill,
+     plus the same breathing pulse the old header CTA had to keep drawing
+     the eye without needing extra color. */
+  /* Naver green, since this button links out to a Naver Place booking page —
+     matching that brand's own color makes the destination recognizable
+     before the click, the same way the Kakao button uses Kakao yellow. */
+  .quick-bar .qb-reserve {
+    background:#03C75A; color:#fff; font-size:13.5px; padding:12px 22px;
+    animation: bookPulse 2.6s ease-in-out infinite;
+  }
+  @keyframes bookPulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.05); } }
+  /* 상담 — second priority, Kakao's own brand yellow so it's instantly
+     recognizable as "chat" the way it is on the inpock page. */
+  .quick-bar .qb-kakao { background:#FEE500; color:#3C1E1E; }
+  .quick-bar .qb-kakao svg { width:15px; height:15px; flex-shrink:0; }
+  .quick-bar .qb-reserve svg, .quick-bar .qb-shop svg { width:15px; height:15px; flex-shrink:0; }
+  /* 홈페이지 — lowest priority of the three, so it's just an outline on
+     translucent white rather than a solid fill, the same way inpock's own
+     "쇼핑몰 바로가기" item naturally read quieter than the booking/chat ones. */
+  .quick-bar .qb-shop { background:rgba(255,255,255,0.82); color:#1A1714; border:1px solid rgba(26,23,20,0.14); }
+  @media (max-width:700px){
+    .quick-bar { padding:18px 4vw; gap:6px; }
+    .quick-bar > a { padding:10px 14px; font-size:11.5px; }
+    .quick-bar .qb-reserve { font-size:12.5px; padding:11px 16px; }
+    .quick-bar span.qb-label-long { display:none; }
+  }
+
+  /* ============ INTRO — cinematic title card before the hero, so the brand
+     name gets one dedicated dark-screen moment instead of permanently
+     sitting on top of (and fighting with) the hero video. ============ */
+  .intro {
+    position:fixed; inset:0; z-index:999;
+    background:#1A1714; display:flex; align-items:center; justify-content:center;
+  }
+  .intro .word {
+    font-family:'Cormorant Garamond',serif; font-weight:600; color:#EFEDEA;
+    font-size:7vw; letter-spacing:4px; opacity:0;
+  }
+  body.intro-active { overflow:hidden; height:100vh; }
+
+  /* ============ HERO — the video is the subject now; no large type sits on
+     top of it. Brand context lives in a small corner block instead, with a
+     soft local shadow (not a full veil) so the footage stays unobstructed. ============ */
+  .hero {
+    height:100vh; min-height:640px;
+    position:relative; overflow:hidden;
+  }
+  .hero-video {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;
+    filter:saturate(1.35) contrast(1.06);
+  }
+  .hero-info {
+    position:absolute; left:5vw; bottom:78px; z-index:2; max-width:520px; text-align:left;
+  }
+  /* Sized and weighted up substantially from the original small caption —
+     at the old clamp(15px,1.7vw,21px)/13.5px sizing the whole block read as
+     a quiet corner caption, leaving the video's empty center/right-side
+     negative space feeling unanchored. Scaling this up (and adding the
+     divider rule below) gives the text enough visual weight to balance
+     against the footage instead of getting lost in it. Typed in
+     character-by-character (see JS) rather than the blur/rise reveal used
+     elsewhere, so it reads as a deliberate typewritten line instead of just
+     another fading caption. */
+  .hero .kicker {
+    font-size:clamp(18px,3.2vw,40px); font-weight:600; letter-spacing:3.5px; color:#fff;
+    text-transform:uppercase; margin-bottom:16px; white-space:nowrap;
+    text-shadow:0 2px 18px rgba(0,0,0,0.5);
+  }
+  /* The outer <span> wrapping the line stays opacity:1 (it's just a text
+     container) — only the per-character spans JS injects inside it (.kc)
+     start hidden, since CSS opacity on an ancestor would mask children
+     regardless of their own opacity. */
+  .hero .kicker .kc { display:inline-block; opacity:0; }
+  .hero .kicker .caret {
+    display:inline-block; margin-left:2px; opacity:0;
+    animation:caretBlink 0.9s step-end infinite;
+  }
+  @keyframes caretBlink { 50%{ opacity:0; } }
+  /* Short horizontal rule between the kicker and sub line, animated in like
+     a drawn line — gives the block a bit of structure/anchoring rather than
+     being two loose lines of text floating in open video space. */
+  .hero .divider {
+    width:0; height:1px; background:rgba(255,255,255,0.55); margin-bottom:16px;
+    box-shadow:0 1px 8px rgba(0,0,0,0.35);
+  }
+  .hero .sub {
+    font-size:clamp(15px,1.5vw,18.5px); letter-spacing:0.3px; color:#fff; font-weight:300; line-height:1.7;
+    text-shadow:0 1px 12px rgba(0,0,0,0.35);
+  }
+  .hero .sub span { display:block; transform:translateY(14px); opacity:0; filter:blur(6px); }
+  @media (max-width:700px){
+    .hero-info { max-width:78vw; bottom:56px; }
+  }
+  .hero .scroll-indicator {
+    position:absolute; bottom:40px; left:50%; transform:translateX(-50%); z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0;
+    font-size:11px; letter-spacing:2px; color:#fff; text-shadow:0 1px 12px rgba(0,0,0,0.35);
+  }
+  .hero .scroll-indicator .stick { width:1px; height:30px; background:rgba(255,255,255,0.35); position:relative; overflow:hidden; }
+  .hero .scroll-indicator .stick i { position:absolute; top:-100%; left:0; width:100%; height:100%; background:#fff; animation:stick 1.8s ease-in-out infinite; }
+  @keyframes stick { 0%{top:-100%;} 50%{top:0;} 100%{top:100%;} }
+
+  /* ============ SECTION SCAFFOLD ============ */
+  section { position:relative; padding:14vw 5vw; }
+  .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#8a7e6f; margin-bottom:1.4vw; overflow:hidden; }
+  .eyebrow span { display:block; transform:translateY(120%); }
+  /* 'Gowun Dodum' as fallback: Cormorant Garamond has no Hangul glyphs, so
+     without it the browser falls back to a generic system serif for any
+     Korean text in these headings. Gowun Batang (a Korean serif) was tried
+     first, but its serif strokes still read as too sharp/stiff next to the
+     soft video and rounded Pretendard body copy — switched to Gowun Dodum,
+     a rounded *sans* with no hard serif terminals, for a visibly softer feel
+     while keeping Cormorant Garamond for the Latin characters. */
+  h2.heading { font-family:'Cormorant Garamond','Gowun Dodum',sans-serif; font-weight:600; font-size:6vw; line-height:1.05; color:#1A1714; }
+  h2.heading .row { overflow:hidden; }
+  h2.heading .row span { display:block; transform:translateY(110%); }
+  @media (min-width:1200px){ h2.heading{ font-size:64px; } }
+
+  /* ============ STATEMENT — single-line brand identity, no imagery ============ */
+  .statement { text-align:center; padding:9vw 5vw 11vw; }
+  .statement-text { font-family:'Cormorant Garamond','Gowun Dodum',sans-serif; font-weight:600; font-size:clamp(26px,4.4vw,46px); line-height:1.35; color:#1A1714; max-width:920px; margin:0 auto; }
+  .statement-text .row { overflow:hidden; }
+  .statement-text .row span { display:block; transform:translateY(110%); }
+
+  /* ============ PRODUCT PARALLAX — each product zooms in/out as it scrolls ============ */
+  .product-stage {
+    position:relative; /* was missing — without this, every absolutely-positioned child
+      (.product-label, .product-index, .product-frame) anchored to the document's
+      initial containing block instead of its own section, so all 5 labels collapsed
+      onto the same on-screen spot regardless of scroll position */
+    height:100vh; min-height:560px; display:flex; align-items:center; justify-content:center;
+    overflow:hidden; padding:0;
+  }
+  /* image + name are grouped and centered together as one block, so the
+     gap between them is a fixed, small distance regardless of viewport
+     height — previously the name was pinned to bottom:6vh of the full
+     100vh stage while the image sat at vertical center, so on a tall
+     white background they could end up 200px+ apart. */
+  .product-content { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  /* Hover zoom lives on .product-frame (the wrapper), not the <img> itself —
+     the <img>'s own transform is already driven by GSAP on scroll (the
+     0.82 -> 1.18 parallax zoom), and GSAP writes that as an inline style,
+     which would silently stomp any CSS :hover transform put on the same
+     element. Scaling the wrapper instead keeps the two effects independent:
+     scroll zoom always applies to the image, hover zoom applies on top of
+     it via the parent, with its own transition. */
+  .product-frame {
+    display:block; position:relative; width:min(56vw,760px); aspect-ratio:16/11;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .product-frame:hover { transform:scale(1.045); }
+  .product-frame img {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:contain; will-change:transform;
+  }
+  /* ============ COLOR SWITCHER — click-driven color cycling (MELO BUBBLE
+     for now). An earlier scroll-scrubbed version tied color changes to
+     scroll position, but that meant the user had to scroll at exactly the
+     right pace to see each color "hold" — too fragile/timing-dependent.
+     Manual click control means it's never tied to scroll speed. ============ */
+  .color-switcher { position:relative; }
+  .color-next {
+    position:absolute; right:-8px; top:50%; transform:translateY(-50%); z-index:3;
+    width:44px; height:44px; border-radius:50%; border:none;
+    background:rgba(255,255,255,0.85); color:#1A1714; font-size:22px; line-height:1;
+    cursor:pointer; box-shadow:0 4px 16px rgba(26,23,20,0.18);
+    transition:transform .25s ease, background .25s ease;
+  }
+  .color-next:hover { transform:translateY(-50%) scale(1.08); background:#fff; }
+  @media (max-width:700px){ .color-next{ right:4px; width:38px; height:38px; font-size:18px; } }
+
+  .product-label {
+    font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(24px,4vw,42px);
+    letter-spacing:3px; text-transform:uppercase; color:#1A1714;
+    overflow:hidden;
+    order:-1; /* flex order, not DOM order — puts the name above the image
+      without needing the JS reveal logic (which targets these elements by
+      selector, not document position) to change at all. */
+    margin-bottom:19px; /* ~5mm extra breathing room above the image, on
+      top of the column's own 8px gap */
+  }
+  .product-label span, .product-index span { display:block; }
+  .product-index {
+    position:absolute; top:6vh; left:50%; transform:translateX(-50%);
+    font-size:12px; letter-spacing:3px; color:#8a7e6f;
+    overflow:hidden;
+  }
+
+  /* ============ RESERVE — the page's actual goal, given the most visual
+     weight. A full dark reversal (the original version) read as off-brand —
+     the real MAV STUDIO site stays in white/light-gray throughout — so the
+     "this is the destination" feeling now comes from a warm light-gray
+     panel (a tonal step down from the page's pure white, not a full
+     inversion) plus a subtle grain texture and staggered entrance, rather
+     than from a stark black/white reversal. No showroom photography (the
+     brand's existing shots are too thin to hold a hero-sized crop), so the
+     weight still comes mainly from scale/typography. */
+  .reserve {
+    background:#EFEAE2; color:#1A1714;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:12vw 5vw; position:relative; overflow:hidden;
+  }
+  /* Cheap CSS-only grain: a tiled SVG noise filter, no image asset needed.
+     Kept very low-opacity — just enough to break up the flat fill so the
+     section doesn't feel as static/dead as the original solid color did. */
+  .reserve::before {
+    content:''; position:absolute; inset:0; opacity:0.5; pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.35'/></svg>");
+  }
+  .reserve .eyebrow { color:#8a7e6f; margin:0 auto 1.4vw; position:relative; z-index:1; }
+  .reserve .eyebrow span { color:#8a7e6f; }
+  .reserve .heading { color:#1A1714; font-size:8vw; margin:0 auto; position:relative; z-index:1; }
+  @media (min-width:1200px){ .reserve .heading{ font-size:80px; } }
+  .reserve-sub {
+    margin:28px auto 0; max-width:480px; font-size:15px; line-height:1.9; color:#6b6053; font-weight:300;
+    position:relative; z-index:1; opacity:0; transform:translateY(16px);
+  }
+  .reserve-cta {
+    display:inline-flex; align-items:center; gap:10px; margin-top:48px;
+    padding:21px 52px; background:#1A1714; color:#EFEAE2; font-size:15.5px; font-weight:600;
+    letter-spacing:1px; border-radius:999px; position:relative; z-index:1;
+    opacity:0; transform:translateY(16px);
+  }
+  .reserve-cta .ring { position:absolute; inset:0; border:1px solid rgba(26,23,20,0.35); border-radius:999px; animation:ring 2.2s ease-out infinite; }
+  @keyframes ring { 0%{ transform:scale(1); opacity:0.8; } 100%{ transform:scale(1.3); opacity:0; } }
+  .reserve-meta {
+    margin-top:52px; display:flex; flex-direction:column; gap:10px;
+    position:relative; z-index:1;
+  }
+  .reserve-meta .row2 { display:flex; gap:10px; justify-content:center; font-size:13px; color:#8a7e6f; opacity:0; transform:translateY(12px); }
+  .reserve-meta b { font-weight:600; color:#1A1714; }
+
+  footer {
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    padding:40px 5vw 30px; font-size:12px; color:#8a7e6f;
+    background:#EFEAE2; border-top:1px solid rgba(26,23,20,0.08);
+  }
+  footer .mark { font-family:'Cormorant Garamond',serif; font-size:15px; letter-spacing:2px; color:#1A1714; }
+  footer div:last-child { color:#8a7e6f; }
+</style>
+</head>
+<body class="intro-active">
+
+<div class="intro" id="intro">
+  <div class="word">MAV STUDIO</div>
+</div>
+
+<div class="site-logo">
+  <img src="images/mav/logo_top.jpg" alt="MAV STUDIO">
+</div>
+
+<header class="site-header">
+  <div></div>
+  <nav></nav>
+  <div></div>
+</header>
+
+<div class="quick-bar">
+  <a href="#" id="quickReserve" target="_blank" rel="noopener" class="qb-reserve">
+    <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.5h14" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 1.5v3M12.5 1.5v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M5.8 10.2l1.8 1.8 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>쇼룸 예약하기</span>
+  </a>
+  <a href="http://pf.kakao.com/_lpfxixl" target="_blank" rel="noopener" class="qb-kakao">
+    <svg viewBox="0 0 18 18" fill="none"><path d="M9 1.5C4.86 1.5 1.5 4.13 1.5 7.38c0 2.07 1.38 3.9 3.47 4.93L4.1 15.3c-.06.2.17.36.34.23l3.5-2.33c.35.04.7.06 1.06.06 4.14 0 7.5-2.63 7.5-5.88S13.14 1.5 9 1.5z" fill="currentColor"/></svg>
+    <span>실시간 상담</span>
+  </a>
+  <a href="https://mav-studio.co.kr/index.html" target="_blank" rel="noopener" class="qb-shop">
+    <svg viewBox="0 0 18 18" fill="none"><path d="M5 5.5V4.2a4 4 0 0 1 8 0v1.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="2.8" y="5.5" width="12.4" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/></svg>
+    <span class="qb-label-long">쇼핑몰 바로가기</span>
+  </a>
+</div>
+
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="videos/hero-comfort.mp4" type="video/mp4">
+  </video>
+  <div class="hero-info">
+    <div class="kicker"><span>PREMIUM CUSTOM SOFA</span><span class="caret">|</span></div>
+    <div class="divider"></div>
+    <div class="sub"><span>유럽산 원단 &amp; 부자재로 완성하는 맞춤 소파</span></div>
+  </div>
+  <div class="scroll-indicator"><div class="stick"><i></i></div>SCROLL</div>
+</section>
+
+<section id="statement" class="statement">
+  <div class="statement-text">
+    <div class="row"><span>가족과 사람의 ‘쉼’에서 시작하는,</span></div>
+    <div class="row"><span>세상에 단 하나뿐인 디자인.</span></div>
+  </div>
+</section>
+
+<section id="products" style="padding:0">
+  <div class="product-stage" data-product data-name="MELO BUBBLE" data-index="01 / 05">
+    <div class="product-content">
+      <div class="color-switcher">
+        <a class="product-frame" href="https://mav-studio.co.kr/product/%EB%A9%9C%EB%A1%9C-%EB%B2%84%EB%B8%94-4%EC%9D%B8-%ED%8C%A8%EB%B8%8C%EB%A6%AD-%EB%AA%A8%EB%93%88-%EC%86%8C%ED%8C%8C/331/category/25/display/1/" target="_blank" rel="noopener">
+          <img src="images/mav/melo_bubble.png" alt="MELO BUBBLE 아이보리">
+          <img class="color-frame color-frame-real" src="images/mav/melo_bubble_skyblue.png" alt="MELO BUBBLE 하늘색" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_bubble_red.png" alt="MELO BUBBLE 레드" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_bubble_gray.png" alt="MELO BUBBLE 그레이" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_bubble_pink.png" alt="MELO BUBBLE 핑크" style="opacity:0">
+        </a>
+        <button type="button" class="color-next" aria-label="다음 색상 보기">&#8250;</button>
+      </div>
+      <div class="product-label"><span>Melo Bubble</span></div>
+    </div>
+    <div class="product-index"><span>01 / 05</span></div>
+  </div>
+  <div class="product-stage" data-product data-name="MELO STONE" data-index="02 / 05">
+    <div class="product-content">
+      <div class="color-switcher">
+        <a class="product-frame" href="https://mav-studio.co.kr/product/%EB%A9%9C%EB%A1%9C-%EC%8A%A4%ED%86%A4-5%EC%9D%B8-%ED%8C%A8%EB%B8%8C%EB%A6%AD-%EB%AA%A8%EB%93%88-%EC%86%8C%ED%8C%8C/288/category/25/display/1/" target="_blank" rel="noopener">
+          <img src="images/mav/melo_stone.png" alt="MELO STONE 어반 그레이">
+          <img class="color-frame color-frame-real" src="images/mav/melo_stone_black.png" alt="MELO STONE 블랙" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_stone_navy.jpg" alt="MELO STONE 네이비" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_stone_burgundy.jpg" alt="MELO STONE 버건디" style="opacity:0">
+        </a>
+        <button type="button" class="color-next" aria-label="다음 색상 보기">&#8250;</button>
+      </div>
+      <div class="product-label"><span>Melo Stone</span></div>
+    </div>
+    <div class="product-index"><span>02 / 05</span></div>
+  </div>
+  <div class="product-stage" data-product data-name="MELO ROUND" data-index="03 / 05">
+    <div class="product-content">
+      <div class="color-switcher">
+        <a class="product-frame" href="https://mav-studio.co.kr/product/%EB%A9%9C%EB%A1%9C-%EB%9D%BC%EC%9A%B4%EB%93%9C-ver2-5%EC%9D%B8-%EB%B2%A8%EB%B2%B3-%EC%86%8C%ED%8C%8C-%EC%9C%A1%EA%B0%81%ED%98%95/210/category/26/display/1/" target="_blank" rel="noopener">
+          <img src="images/mav/melo_round.png" alt="MELO ROUND 잉크블루">
+          <img class="color-frame color-frame-real" src="images/mav/melo_round_gray.png" alt="MELO ROUND 그레이" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_round_khaki.png" alt="MELO ROUND 카키" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_round_brown.png" alt="MELO ROUND 브라운" style="opacity:0">
+        </a>
+        <button type="button" class="color-next" aria-label="다음 색상 보기">&#8250;</button>
+      </div>
+      <div class="product-label"><span>Melo Round</span></div>
+    </div>
+    <div class="product-index"><span>03 / 05</span></div>
+  </div>
+  <div class="product-stage" data-product data-name="MELO BOX" data-index="04 / 05">
+    <div class="product-content">
+      <div class="color-switcher">
+        <a class="product-frame" href="https://mav-studio.co.kr/product/%EB%A9%9C%EB%A1%9C-%EB%B0%95%EC%8A%A4-4%EC%9D%B8-%ED%8C%A8%EB%B8%8C%EB%A6%AD-%EC%86%8C%ED%8C%8C-%EC%8A%A4%ED%88%B4%ED%98%95/128/category/26/display/1/" target="_blank" rel="noopener">
+          <img src="images/mav/melo_box.png" alt="MELO BOX 그린">
+          <img class="color-frame color-frame-real" src="images/mav/melo_box_ivory.png" alt="MELO BOX 아이보리" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_box_brown.png" alt="MELO BOX 브라운" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_box_navy.png" alt="MELO BOX 네이비" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_box_yellow.png" alt="MELO BOX 옐로우" style="opacity:0">
+        </a>
+        <button type="button" class="color-next" aria-label="다음 색상 보기">&#8250;</button>
+      </div>
+      <div class="product-label"><span>Melo Box</span></div>
+    </div>
+    <div class="product-index"><span>04 / 05</span></div>
+  </div>
+  <div class="product-stage" data-product data-name="MELO WOOD" data-index="05 / 05">
+    <div class="product-content">
+      <div class="color-switcher">
+        <a class="product-frame" href="https://mav-studio.co.kr/product/%EB%A9%9C%EB%A1%9C-%EC%9A%B0%EB%93%9C-1%EC%9D%B8-%EC%9B%94%EB%84%9B-%ED%8C%A8%EB%B8%8C%EB%A6%AD-%EC%86%8C%ED%8C%8C/56/category/24/display/1/" target="_blank" rel="noopener">
+          <img src="images/mav/melo_wood_navy.png" alt="MELO WOOD 네이비">
+          <img class="color-frame color-frame-real" src="images/mav/melo_wood_skyblue.png" alt="MELO WOOD 하늘색" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_wood_orange.png" alt="MELO WOOD 오렌지" style="opacity:0">
+          <img class="color-frame color-frame-real" src="images/mav/melo_wood_brown.png" alt="MELO WOOD 브라운" style="opacity:0">
+        </a>
+        <button type="button" class="color-next" aria-label="다음 색상 보기">&#8250;</button>
+      </div>
+      <div class="product-label"><span>Melo Wood</span></div>
+    </div>
+    <div class="product-index"><span>05 / 05</span></div>
+  </div>
+</section>
+
+<section id="reserve" class="reserve">
+  <div class="reserve-inner">
+    <div class="eyebrow"><span>Reservation</span></div>
+    <h2 class="heading"><div class="row"><span>방문 상담 예약</span></div></h2>
+    <p class="reserve-sub">쇼룸에서 원단과 마감을 직접 확인하고<br>나만의 소파를 상담받아보세요.</p>
+    <a href="#" id="naverBtn" target="_blank" rel="noopener" class="reserve-cta"><span class="ring"></span>네이버 플레이스에서 예약하기</a>
+    <div class="reserve-meta">
+      <div class="row2"><b>주소</b><span>서울특별시 서초구 사평대로8길 7 (반포동) 06575</span></div>
+      <div class="row2"><b>운영시간</b><span>11:00 – 19:00 · 월요일 휴무</span></div>
+      <div class="row2"><b>전화</b><span>02. 584. 8884</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="mark">MAV STUDIO</div>
+  <div>@mav_studio</div>
+</footer>
+
+
 <script>
-gsap.registerPlugin(ScrollTrigger);
+  document.getElementById('naverBtn').href = 'https://booking.naver.com/booking/13/bizes/1664963';
+  document.getElementById('quickReserve').href = 'https://booking.naver.com/booking/13/bizes/1664963';
 
-/* ──────────────────────────────────────────
-   CURSOR
-────────────────────────────────────────── */
-(function initCursor(){
-  const dot  = document.getElementById('c-dot');
-  const ring = document.getElementById('c-ring');
-  let mx=0, my=0, rx=0, ry=0;
+  gsap.registerPlugin(ScrollTrigger);
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    gsap.to(dot, { x:mx, y:my, duration:.06, ease:'none' });
+  /* ---- Lenis smooth scroll, wired to GSAP's ticker ---- */
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true
   });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
 
-  (function lerpRing(){
-    rx += (mx-rx) * .095;
-    ry += (my-ry) * .095;
-    ring.style.left = rx + 'px';
-    ring.style.top  = ry + 'px';
-    requestAnimationFrame(lerpRing);
-  })();
-
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('c-hov'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('c-hov'));
-  });
-})();
-
-
-/* ──────────────────────────────────────────
-   LOADER
-────────────────────────────────────────── */
-(function initLoader(){
-  document.body.style.overflow = 'hidden';
-
-  const fill  = document.getElementById('ldFill');
-  const count = document.getElementById('ldCount');
-  const rule  = document.getElementById('ldRule');
-
-  let progress = 0;
-  const tick = setInterval(() => {
-    progress = Math.min(progress + Math.random() * 14 + 4, 100);
-    count.textContent = Math.floor(progress);
-    gsap.to(fill, { scaleX: progress/100, duration:.35, ease:'power2.out' });
-    if(progress >= 100){
-      clearInterval(tick);
-      count.textContent = '100';
-    }
-  }, 90);
-
-  const tl = gsap.timeline({
-    onComplete: () => {
-      document.body.style.overflow = '';
-      initHero();
-      initNav();
-      initScrollReveal();
-    }
-  });
-
-  /* Wordmark letters stagger */
-  tl.to('.ld-wordmark span', {
-      y: 0, opacity: 1,
-      duration: .55, stagger: .045,
-      ease: 'power3.out'
-    })
-    /* Divider rule */
-    .to(rule, {
-      scaleY: 1,
-      duration: .6,
-      ease: 'power2.inOut'
-    }, '-=.2')
-    /* Sub text */
-    .to('.ld-sub span', {
-      y: 0, opacity: 1,
-      duration: .5,
-      ease: 'power3.out'
-    }, '-=.35')
-    /* Wait for count to finish */
-    .to({}, { duration: 1.2 })
-    /* Fade out loader */
-    .to('#loader', {
-      yPercent: -100,
-      duration: 1.1,
-      ease: 'power4.inOut'
-    })
-    .set('#loader', { display: 'none' });
-})();
-
-
-/* ──────────────────────────────────────────
-   NAV — appear + scroll state
-────────────────────────────────────────── */
-function initNav(){
-  const nav = document.getElementById('nav');
-
-  gsap.to(['.nav-logo', '.nav-links', '.nav-cta'], {
-    opacity: 1,
-    y: 0,
-    duration: .9,
-    stagger: .08,
-    ease: 'power3.out',
-    delay: .1
-  });
-
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
-}
-
-
-/* ──────────────────────────────────────────
-   HERO
-────────────────────────────────────────── */
-function initHero(){
-
-  /* ── Video setup ── */
-  const vid    = document.getElementById('heroVid');
-  const slides = Array.from(document.querySelectorAll('.hero-bg .slide'));
-  const counter= document.getElementById('heroCounter');
-  const cCur   = document.getElementById('cCur');
-  const cFill  = document.getElementById('cFill');
-
-  vid.playbackRate = 2;
-  vid.addEventListener('canplay', () => { vid.playbackRate = 2; });
-
-  /* ── Content entrance animation ── */
-  const entrance = gsap.timeline({ delay: .15 });
-
-  /* 1. Video fade in */
-  entrance
-    .to(vid, {
-      opacity: 1,
-      scale: 1,
-      duration: 2.2,
-      ease: 'power2.out'
-    })
-    /* 2. Tag line */
-    .to('.hero-tag span', {
-      y: 0,
-      duration: .9,
-      ease: 'power3.out'
-    }, '-=1.6')
-    /* 3. Headline words — staggered with slight rotation */
-    .to('.hero-h .w span', {
-      y: 0,
-      rotate: 0,
-      duration: 1.1,
-      stagger: .1,
-      ease: 'power4.out'
-    }, '-=1.2')
-    /* 4. Sub text */
-    .to('.hero-sub p', {
-      y: 0,
-      duration: .9,
-      ease: 'power3.out'
-    }, '-=.7')
-    /* 5. Scroll hint */
-    .to('#hScrollLine', {
-      scaleX: 1,
-      duration: .9,
-      ease: 'power2.out'
-    }, '-=.6')
-    .to('.hero-scroll span', {
-      y: 0,
-      duration: .7,
-      ease: 'power3.out'
-    }, '-=.7');
-
-
-  /* ── Slideshow after video ends ── */
-  let curIdx  = -1;
-  let slideTimer = null;
-
-  function setCounter(idx){
-    cCur.textContent = String(idx + 1).padStart(2,'0');
-    /* restart progress bar */
-    gsap.killTweensOf(cFill);
-    gsap.fromTo(cFill, { scaleX:0 }, { scaleX:1, duration:3.4, ease:'none' });
-  }
-
-  function showSlide(idx, instant){
-    const prev = curIdx;
-    curIdx = idx;
-
-    if(prev >= 0){
-      gsap.to(slides[prev], {
-        opacity: 0,
-        scale: 1.03,
-        duration: instant ? 0 : 1.4,
-        ease: 'power2.inOut'
-      });
-    }
-    gsap.to(slides[idx], {
-      opacity: 1,
-      scale: 1,
-      duration: instant ? 0 : 1.6,
-      ease: 'power2.inOut'
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -20 }); }
     });
-    setCounter(idx);
-  }
-
-  function startSlideshow(){
-    /* Show counter */
-    gsap.to(counter, { opacity:1, duration:.8, ease:'power2.out' });
-    showSlide(0);
-    let i = 1;
-    slideTimer = setInterval(() => {
-      showSlide(i);
-      i = (i + 1) % slides.length;
-    }, 3600);
-  }
-
-  vid.addEventListener('ended', () => {
-    gsap.to(vid, { opacity:0, scale:1.02, duration:1.4, ease:'power2.inOut' });
-    startSlideshow();
   });
 
-  /* Fallback: if video can't load */
-  vid.addEventListener('error', () => {
-    gsap.set(vid, { opacity:0 });
-    startSlideshow();
-  });
+  /* ---- Header logo: cut the flat white backdrop to transparent. The source
+     crop is tiny (101x50) and JPEG-compressed, so cutting out the
+     background at native resolution and letting CSS scale the result up
+     just magnified both the hard cutout edge and the JPEG's own
+     compression speckling. Instead, upscale first with the browser's own
+     smooth interpolation (drawImage onto a 4x canvas), THEN cut out and
+     feather on that smoothed result — the exported image is already
+     high-res, so the <img> tag is scaling it down, not up. ---- */
+  function cutoutWhiteLogo(img, scale = 4) {
+    return new Promise((resolve) => {
+      const run = () => {
+        const w = img.naturalWidth * scale, h = img.naturalHeight * scale;
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, w, h);
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        const isBg = (i) => data[i] > 235 && data[i + 1] > 235 && data[i + 2] > 235;
+        const seen = new Uint8Array(w * h);
+        const alpha = new Uint8Array(w * h).fill(255);
+        const queue = [];
+        for (let x = 0; x < w; x++) { queue.push(x, (h - 1) * w + x); }
+        for (let y = 0; y < h; y++) { queue.push(y * w, y * w + (w - 1)); }
+        let qi = 0;
+        while (qi < queue.length) {
+          const p = queue[qi++];
+          if (seen[p]) continue;
+          seen[p] = 1;
+          const i = p * 4;
+          if (!isBg(i)) continue;
+          alpha[p] = 0;
+          const x = p % w, y = (p - x) / w;
+          if (x > 0) queue.push(p - 1);
+          if (x < w - 1) queue.push(p + 1);
+          if (y > 0) queue.push(p - w);
+          if (y < h - 1) queue.push(p + w);
+        }
+        /* Letters with an enclosed counter (the "D" and "O" in "MAV STUDIO")
+           have a pocket of background-colored pixels that's surrounded
+           entirely by dark ink, never touching the image border — so the
+           border-seeded flood fill above can never reach it, and it stays
+           opaque white. Fix: scan for any bg-colored pixel not already
+           cleared, flood-fill its own connected component (regardless of
+           border contact), and clear it too if that component is small
+           enough to be a letter counter rather than the real background
+           (which the first pass would already have caught in full). */
+        const holeSeen = new Uint8Array(w * h);
+        for (let start = 0; start < w * h; start++) {
+          if (alpha[start] === 0 || holeSeen[start]) continue;
+          const i0 = start * 4;
+          if (!isBg(i0)) continue;
+          const comp = [start];
+          holeSeen[start] = 1;
+          let qi2 = 0;
+          while (qi2 < comp.length) {
+            const p = comp[qi2++];
+            const x = p % w, y = (p - x) / w;
+            const neighbors = [];
+            if (x > 0) neighbors.push(p - 1);
+            if (x < w - 1) neighbors.push(p + 1);
+            if (y > 0) neighbors.push(p - w);
+            if (y < h - 1) neighbors.push(p + w);
+            for (const np of neighbors) {
+              if (holeSeen[np] || alpha[np] === 0) continue;
+              if (!isBg(np * 4)) continue;
+              holeSeen[np] = 1;
+              comp.push(np);
+            }
+          }
+          if (comp.length < w * h * 0.08) {
+            for (const p of comp) alpha[p] = 0;
+          }
+        }
+        /* JPEG ringing around the letters leaves a band of pixels that are
+           light but just barely fail the >235 flood-fill test, so they stay
+           opaque and survive as visible speckle/noise hugging the edges
+           once feathered. A despeckle pass fixes this: any currently-opaque
+           pixel that's both light-ish (the kind of pixel ringing produces,
+           not the logo's actual dark ink) and mostly surrounded by already-
+           transparent pixels gets pulled into the background too — this
+           only reaches the thin noisy halo, never the solid interior of a
+           letter, since real letter pixels are darker and have opaque
+           neighbors on all sides. */
+        const dr = Math.max(2, Math.round(scale));
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const p = y * w + x;
+            if (alpha[p] === 0) continue;
+            const i = p * 4;
+            const isLightish = data[i] > 180 && data[i + 1] > 180 && data[i + 2] > 180;
+            if (!isLightish) continue;
+            let transparentCount = 0, total = 0;
+            for (let dy = -dr; dy <= dr; dy++) {
+              for (let dx = -dr; dx <= dr; dx++) {
+                const nx = x + dx, ny = y + dy;
+                if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                total++;
+                if (alpha[ny * w + nx] === 0) transparentCount++;
+              }
+            }
+            if (transparentCount / total > 0.45) alpha[p] = 0;
+          }
+        }
+        const r = Math.max(1, Math.round(scale / 2));
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            let sum = 0, count = 0;
+            for (let dy = -r; dy <= r; dy++) {
+              for (let dx = -r; dx <= r; dx++) {
+                const nx = x + dx, ny = y + dy;
+                if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                sum += alpha[ny * w + nx]; count++;
+              }
+            }
+            data[(y * w + x) * 4 + 3] = Math.round(sum / count);
+          }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        canvas.toBlob((blob) => { img.src = URL.createObjectURL(blob); img.onload = resolve; }, 'image/png');
+      };
+      if (img.complete) run(); else img.onload = run;
+    });
+  }
+  cutoutWhiteLogo(document.querySelector('.site-logo img'));
 
-
-  /* ── Parallax on scroll ── */
-  gsap.to('#heroBg', {
-    yPercent: 18,
-    ease: 'none',
-    scrollTrigger:{
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1
+  /* ---- Header logo legibility on the dark .reserve section: toggle a
+     class that inverts the logo's filter once that section is in view. ---- */
+  /* ---- Reserve section: stagger the sub line, CTA, and each address row
+     in on top of the heading's own reveal, instead of everything just being
+     present the moment the section scrolls into view. Without this the
+     section read as static/inert next to the hero video and the product
+     parallax — this gives it the same "things are happening" quality. ---- */
+  ScrollTrigger.create({
+    trigger: '#reserve',
+    start: 'top 70%',
+    once: true,
+    onEnter: () => {
+      gsap.timeline()
+        .to('.reserve-sub', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.1)
+        .to('.reserve-cta', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.35)
+        .to('.reserve-meta .row2', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.12 }, 0.6);
     }
   });
 
-  /* Fade out hero content on scroll */
-  gsap.to('.hero-content, .hero-counter', {
-    opacity: 0,
-    y: -30,
-    ease: 'none',
-    scrollTrigger:{
-      trigger: '#hero',
-      start: 'top top',
-      end: '40% top',
-      scrub: 1.2
-    }
-  });
-}
+  /* ---- Split the kicker line into one span per character so it can be
+     typed in, rather than faded/risen like the rest of the hero — this is
+     the line carrying "this is a sofa brand", so it gets its own distinct,
+     deliberate entrance instead of blending into the generic reveal style. ---- */
+  function splitChars(el) {
+    const text = el.textContent;
+    el.textContent = '';
+    return [...text].map((ch) => {
+      const span = document.createElement('span');
+      span.textContent = ch === ' ' ? ' ' : ch;
+      span.className = 'kc';
+      el.appendChild(span);
+      return span;
+    });
+  }
+  const kickerChars = splitChars(document.querySelector('.hero .kicker span'));
 
+  /* ---- Cinematic intro: brand word fades in on a dark screen, holds
+     briefly, then fades the whole card out — a single dedicated moment
+     for the brand name instead of it permanently overlapping the hero
+     video. Hero text/scroll-cue entrance is chained after it finishes so
+     nothing animates in underneath while the intro still covers it. ---- */
+  gsap.timeline()
+    .to('.intro .word', { opacity: 1, duration: 0.9, ease: 'power2.out' })
+    .to('.intro .word', { opacity: 1, duration: 0.7 })
+    .to('#intro', {
+      opacity: 0, duration: 0.7, ease: 'power2.inOut',
+      onComplete: () => {
+        document.getElementById('intro').style.display = 'none';
+        document.body.classList.remove('intro-active');
+      }
+    })
+    .to('.hero .kicker .caret', { opacity: 1, duration: 0.01 }, '-=0.3')
+    .to(kickerChars, { opacity: 1, duration: 0.02, stagger: 0.045, ease: 'none' }, '-=0.28')
+    .to('.hero .kicker .caret', { opacity: 0, duration: 0.3 }, '+=0.3')
+    .to('.hero .divider', { width: '64px', duration: 0.6, ease: 'power2.out' }, '-=0.1')
+    .to('.hero .sub span', { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power2.out' }, '-=0.2')
+    .to('.hero .scroll-indicator', { opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.6');
 
-/* ──────────────────────────────────────────
-   GENERAL SCROLL REVEAL
-────────────────────────────────────────── */
-function initScrollReveal(){
-  document.querySelectorAll('[data-reveal]').forEach(el => {
+  /* ---- Generic line-mask reveal for every section heading/statement, scroll-triggered ---- */
+  document.querySelectorAll('section:not(.hero) .eyebrow span, section:not(.hero) h2.heading .row span, .statement-text .row span').forEach((el) => {
     ScrollTrigger.create({
       trigger: el,
       start: 'top 88%',
-      onEnter: () => el.classList.add('vis')
+      once: true,
+      onEnter: () => gsap.to(el, { y: '0%', duration: 1, ease: 'power3.out' })
     });
   });
-}
 
-
-/* ──────────────────────────────────────────
-   PRODUCTS DATA
-────────────────────────────────────────── */
-const PRODUCTS = [
-  {
-    num: '01', name: 'MELO\nBUBBLE', tag: 'Signature · Full Set',
-    img: 'sofa.jpg', bg: '#F0EBE2',
-    aura: 'rgba(230,210,180,.32)',
-    desc: '유럽산 프리미엄 부클레 원단과\n고밀도 폼의 완성형 4모듈 소파.',
-    dims: 'W 280 × D 96 × H 72 cm',
-    phases: [
-      { tag:'OVERVIEW',  big:'Full\nConfiguration', sub:'4-Module · Full Set',         body:'4개의 모듈이 하나로 이어진 완성형. 공간의 중심을 단번에 잡아줍니다.' },
-      { tag:'FABRIC',    big:'Premium\nBoucle',      sub:'Italy · Belgium · Portugal',  body:'유럽 3국에서 직수입한 부클레 원단. 12가지 컬러, 3가지 소재로 완성됩니다.' },
-      { tag:'DETAIL',    big:'Deep\nCushion',        sub:'75kg/m³ Foam + Down Fill',    body:'고밀도 폼과 다운 필링의 이중 구조로 오래 앉아도 형태가 유지됩니다.' }
-    ],
-    zooms: [ [1.0,'50%','50%'], [1.55,'66%','38%'], [1.9,'34%','62%'] ]
-  },
-  {
-    num: '02', name: 'MELO\nSTONE', tag: 'Organic Form Series',
-    img: 'MELO STONE.jpg', bg: '#ECEAE6',
-    aura: 'rgba(200,195,185,.28)',
-    desc: '자연석에서 영감 받은\n유기적 곡선의 모듈 소파.',
-    dims: 'W 240 × D 90 × H 68 cm',
-    phases: [
-      { tag:'OVERVIEW',  big:'Organic\nSilhouette', sub:'Stone-Inspired Curve',   body:'자연의 곡선이 담긴 실루엣. 공간의 시선을 단번에 사로잡습니다.' },
-      { tag:'FABRIC',    big:'Micro\nVelvet',        sub:'8 Colorways Available',  body:'빛에 따라 달라지는 마이크로벨벳. 섬세한 촉감과 깊이 있는 색감.' },
-      { tag:'DETAIL',    big:'Zero\nGravity',        sub:'Ergonomic Back Support', body:'몸의 곡선을 따라 설계된 등받이. 장시간 착석에도 편안함이 지속됩니다.' }
-    ],
-    zooms: [ [1.0,'50%','50%'], [1.5,'62%','32%'], [1.85,'42%','68%'] ]
-  },
-  {
-    num: '03', name: 'MELO\nROUND', tag: 'Circular Form Series',
-    img: 'MELO ROUND.jpg', bg: '#EBE8E3',
-    aura: 'rgba(210,200,185,.28)',
-    desc: '원형의 완성미.\n어디서든 존재감을 발하는 소파.',
-    dims: 'Ø 180 × H 72 cm',
-    phases: [
-      { tag:'OVERVIEW',  big:'Pure\nCircle',    sub:'360° Seating Experience', body:'사방에서 앉을 수 있는 원형 구조. 리빙·상업 공간 모두 어울립니다.' },
-      { tag:'FABRIC',    big:'Natural\nLinen',   sub:'6 Earth-Tone Colors',     body:'천연 리넨 원단의 자연스러운 질감. 시간이 지날수록 더 아름다워집니다.' },
-      { tag:'DETAIL',    big:'Seamless\nFinish', sub:'No Front or Back',        body:'앞뒤 구분 없는 완벽한 마감. 어느 각도에서도 하나의 오브제로 완성됩니다.' }
-    ],
-    zooms: [ [1.0,'50%','50%'], [1.55,'55%','30%'], [2.0,'50%','62%'] ]
-  },
-  {
-    num: '04', name: 'MELO\nBOX', tag: 'Structured Form Series',
-    img: 'MELO BOX.jpg', bg: '#E8E5DF',
-    aura: 'rgba(195,188,178,.28)',
-    desc: '절제된 직선미.\n모던한 공간에 품격을 더합니다.',
-    dims: 'W 260 × D 88 × H 74 cm',
-    phases: [
-      { tag:'OVERVIEW',  big:'Sharp\nGeometry',     sub:'Structured · Minimal',         body:'각진 실루엣과 깊은 쿠션의 대비. 시각적 긴장감이 공간을 완성합니다.' },
-      { tag:'FABRIC',    big:'Performance\nBoucle', sub:'Stain-Resistant Finish',        body:'내구성을 높인 퍼포먼스 부클레. 오염에 강하고 관리가 쉽습니다.' },
-      { tag:'DETAIL',    big:'Steel\nFrame',         sub:'Hidden Powder-Coat Structure', body:'파우더코팅 스틸 내부 프레임. 반영구적인 구조 강성을 보장합니다.' }
-    ],
-    zooms: [ [1.0,'50%','50%'], [1.5,'65%','38%'], [1.8,'34%','68%'] ]
-  },
-  {
-    num: '05', name: 'MELO\nWOOD', tag: 'Natural Material Series',
-    img: 'MELO WOOD.jpg', bg: '#E6E2DC',
-    aura: 'rgba(195,185,170,.28)',
-    desc: '원목 레그와 패브릭의 만남.\n따뜻함과 세련미를 동시에.',
-    dims: 'W 220 × D 86 × H 76 cm',
-    phases: [
-      { tag:'OVERVIEW',  big:'Wood &\nFabric',   sub:'Natural Material Pairing', body:'원목의 따뜻함과 패브릭의 부드러움. 자연 소재 인테리어와 완벽한 조화.' },
-      { tag:'FABRIC',    big:'Chenille\nWeave',  sub:'Handwoven · 10 Colors',    body:'수작업으로 짠 쉐닐 원단. 독특한 질감이 공간에 깊이를 더합니다.' },
-      { tag:'DETAIL',    big:'White Oak\nLeg',   sub:'FSC-Certified · Wax Oil',  body:'친환경 FSC 인증 화이트 오크 원목 레그. 왁스 오일 마감으로 영구 보존.' }
-    ],
-    zooms: [ [1.0,'50%','50%'], [1.5,'45%','34%'], [2.0,'58%','70%'] ]
-  }
-];
-
-
-/* ──────────────────────────────────────────
-   BUILD + ANIMATE PRODUCTS
-────────────────────────────────────────── */
-(function initProducts(){
-
-  const container = document.getElementById('products');
-  const lerp  = (a, b, t) => a + (b - a) * t;
-  const easeIO= t => t < .5 ? 2*t*t : -1 + (4 - 2*t)*t;
-
-  PRODUCTS.forEach((p, pi) => {
-
-    /* ── Build HTML ── */
-    const section = document.createElement('section');
-    section.className = 'p-section';
-
-    const nameHtml = p.name.replace('\n','<br>');
-    const descHtml = p.desc.replace('\n','<br>');
-
-    section.innerHTML = `
-      <div class="p-wrap" id="pw${pi}">
-        <div class="p-sticky" id="ps${pi}">
-
-          <div class="p-bg" id="pb${pi}" style="background:${p.bg}"></div>
-
-          <div class="p-ghost">${p.num}</div>
-
-          <!-- Image -->
-          <div class="p-img-wrap" id="piw${pi}">
-            <div class="p-aura" id="pa${pi}"
-              style="background:radial-gradient(circle, ${p.aura} 0%, transparent 65%)"></div>
-            <img id="pi${pi}" src="${p.img}" alt="${p.name.replace('\n',' ')}"
-              onerror="this.style.opacity='.06'">
-          </div>
-
-          <!-- Left info -->
-          <div class="p-info">
-            <div class="p-num">${p.num}</div>
-            <div class="p-tag">${p.tag}</div>
-            <h2 class="p-name">${nameHtml}</h2>
-            <p class="p-desc">${descHtml}</p>
-          </div>
-
-          <!-- Right phase panels -->
-          <div class="p-panels" id="ppp${pi}">
-            ${p.phases.map((ph, i) => `
-              <div class="p-panel${i===0?' on':''}" id="pp${pi}_${i}">
-                <div class="p-phase-tag">${ph.tag}</div>
-                <div class="p-phase-big">${ph.big.replace('\n','<br>')}</div>
-                <div class="p-phase-sub">${ph.sub}</div>
-                <div class="p-phase-body">${ph.body}</div>
-              </div>`).join('')}
-          </div>
-
-          <!-- Dimensions -->
-          <div class="p-dims" id="pd${pi}">
-            <span class="p-dims-label">Dimensions</span>
-            <span class="p-dims-val">${p.dims}</span>
-          </div>
-
-          <!-- Progress -->
-          <div class="p-progress">
-            <div class="p-prog-track">
-              <div class="p-prog-fill" id="ppf${pi}"></div>
-            </div>
-            <div class="p-prog-labels" id="ppl${pi}">
-              ${p.phases.map(ph => `<span>${ph.tag}</span>`).join('')}
-              <span>RESERVE</span>
-            </div>
-          </div>
-
-        </div>
-      </div>`;
-
-    container.appendChild(section);
-
-    /* ── References ── */
-    const wrapper  = document.getElementById(`pw${pi}`);
-    const sticky   = document.getElementById(`ps${pi}`);
-    const img      = document.getElementById(`pi${pi}`);
-    const aura     = document.getElementById(`pa${pi}`);
-    const dims     = document.getElementById(`pd${pi}`);
-    const progFill = document.getElementById(`ppf${pi}`);
-    const labels   = document.getElementById(`ppl${pi}`).querySelectorAll('span');
-    const panels   = sticky.querySelectorAll('.p-panel');
-    const N = p.phases.length;
-    let lastPh = -1;
-
-    /* ── ScrollTrigger ── */
-    ScrollTrigger.create({
-      trigger: wrapper,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1.6,
-
-      onEnter(){ sticky.classList.add('active') },
-      onLeaveBack(){ sticky.classList.remove('active') },
-
-      onUpdate(self){
-        const prog = self.progress;
-
-        /* Progress bar */
-        progFill.style.transform = `scaleX(${prog})`;
-
-        /* Phase index */
-        const raw    = prog * N;
-        const phIdx  = Math.min(Math.floor(raw), N - 1);
-        const phLocal= easeIO(Math.min(raw - phIdx, 1));
-
-        /* Progress labels */
-        const lblIdx = Math.min(Math.floor(prog * (N + 1)), N);
-        labels.forEach((l, i) => l.classList.toggle('on', i === lblIdx));
-
-        /* Phase panel swap */
-        if(phIdx !== lastPh){
-          panels.forEach((panel, i) => panel.classList.toggle('on', i === phIdx));
-          lastPh = phIdx;
+  /* ---- Backdrop whitening, done in-browser via canvas. The studio backdrop
+     (~rgb(238,237,235)) is light gray, not pure white, so it shows as a faint
+     box against the page's white background. An earlier attempt cut the
+     backdrop out via alpha (flood-fill from the border) but that ate into
+     cream-colored sofas (e.g. MELO BUBBLE) whose highlights are
+     colorimetrically inseparable from the backdrop. This version instead
+     remaps every near-white, low-saturation pixel straight to pure white —
+     a global per-pixel color swap, not a connectivity-based cutout, so even
+     if it touches a bright highlight on the product it only brightens that
+     pixel; it can never carve a hole or erase part of the product. */
+  function whitenBackdrop(img, { lightness = 220, neutrality = 12, soft = false, softFloor = 190, softPower = 2 } = {}) {
+    return new Promise((resolve) => {
+      const run = () => {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          if (soft) {
+            /* A hard cutoff snaps each pixel fully white or leaves it alone,
+               which on a fabric this close in tone to the backdrop (an
+               ivory/white sofa) flickers pixel-by-pixel across the weave
+               texture — some texture pixels cross the line, their
+               neighbors don't, producing a salt-and-pepper speckle on the
+               product itself. Easing toward white in proportion to how
+               close a pixel already is (instead of snapping) keeps
+               neighboring texture pixels close in value to each other, so
+               no speckle appears. */
+            if (min > 225 && (max - min) < 10) {
+              data[i] = data[i + 1] = data[i + 2] = 255;
+            } else if (min > softFloor && (max - min) < neutrality) {
+              const ratio = Math.pow((min - softFloor) / (255 - softFloor), softPower);
+              data[i] = r + (255 - r) * ratio;
+              data[i + 1] = g + (255 - g) * ratio;
+              data[i + 2] = b + (255 - b) * ratio;
+            }
+          } else if (min > lightness && (max - min) < neutrality) {
+            data[i] = data[i + 1] = data[i + 2] = 255;
+          }
         }
+        /* Several of the source exports have a solid 1px dark border baked
+           into the file itself (a crop/export artifact, not part of the
+           photo) running down the left and right edges — far too dark to
+           pass the near-white check above, so it stayed as a thin black
+           line right at the product frame's edge. Cloning the next column
+           in over it removes that border without touching any real
+           content, since real content is never confined to a single
+           edge-most pixel column. */
+        for (let y = 0; y < h; y++) {
+          const rowStart = y * w * 4;
+          data[rowStart] = data[rowStart + 4]; data[rowStart + 1] = data[rowStart + 5]; data[rowStart + 2] = data[rowStart + 6];
+          const lastI = rowStart + (w - 1) * 4, prevI = rowStart + (w - 2) * 4;
+          data[lastI] = data[prevI]; data[lastI + 1] = data[prevI + 1]; data[lastI + 2] = data[prevI + 2];
+        }
+        /* A stray specular highlight on the product itself (a small bright
+           glint on dark fabric, e.g.) can pass the same near-white test as
+           the real backdrop, but since it's surrounded by product rather
+           than touching the image border, whitening it turns it into a
+           stark white dot/hole sitting on top of the product. Flood-filling
+           white pixels from the border finds the real backdrop; any other
+           white pixel is such an isolated artifact, and gets inpainted by
+           repeatedly averaging in color from its non-white neighbors until
+           it's fully filled back in. */
+        const isWhite = (p) => { const i = p * 4; return data[i] === 255 && data[i + 1] === 255 && data[i + 2] === 255; };
+        const bgConnected = new Uint8Array(w * h);
+        const wq = [];
+        for (let x = 0; x < w; x++) { wq.push(x, (h - 1) * w + x); }
+        for (let y = 0; y < h; y++) { wq.push(y * w, y * w + (w - 1)); }
+        let wqi = 0;
+        const wseen = new Uint8Array(w * h);
+        while (wqi < wq.length) {
+          const p = wq[wqi++];
+          if (wseen[p]) continue;
+          wseen[p] = 1;
+          if (!isWhite(p)) continue;
+          bgConnected[p] = 1;
+          const x = p % w, y = (p - x) / w;
+          if (x > 0) wq.push(p - 1);
+          if (x < w - 1) wq.push(p + 1);
+          if (y > 0) wq.push(p - w);
+          if (y < h - 1) wq.push(p + w);
+        }
+        let isolated = [];
+        for (let p = 0; p < w * h; p++) {
+          if (isWhite(p) && !bgConnected[p]) isolated.push(p);
+        }
+        let guard = 0;
+        while (isolated.length && guard++ < 64) {
+          const next = [];
+          for (const p of isolated) {
+            const x = p % w, y = (p - x) / w;
+            let sr = 0, sg = 0, sb = 0, count = 0;
+            const neighbors = [];
+            if (x > 0) neighbors.push(p - 1);
+            if (x < w - 1) neighbors.push(p + 1);
+            if (y > 0) neighbors.push(p - w);
+            if (y < h - 1) neighbors.push(p + w);
+            for (const np of neighbors) {
+              if (isWhite(np) && !bgConnected[np]) continue;
+              const ni = np * 4;
+              sr += data[ni]; sg += data[ni + 1]; sb += data[ni + 2]; count++;
+            }
+            if (count === 0) { next.push(p); continue; }
+            const i = p * 4;
+            data[i] = Math.round(sr / count); data[i + 1] = Math.round(sg / count); data[i + 2] = Math.round(sb / count);
+          }
+          isolated = next;
+        }
+        ctx.putImageData(imgData, 0, 0);
+        canvas.toBlob((blob) => {
+          img.src = URL.createObjectURL(blob);
+          img.onload = () => resolve();
+        }, 'image/png');
+      };
+      if (img.complete) run(); else img.onload = run;
+    });
+  }
 
-        /* Zoom + pan */
-        const z0 = p.zooms[phIdx];
-        const z1 = p.zooms[Math.min(phIdx + 1, N - 1)];
-        const scale = lerp(z0[0], z1[0], phLocal);
-        const ox    = lerp(parseFloat(z0[1]), parseFloat(z1[1]), phLocal);
-        const oy    = lerp(parseFloat(z0[2]), parseFloat(z1[2]), phLocal);
-        img.style.transformOrigin = `${ox}% ${oy}%`;
-        img.style.transform = `scale(${scale})`;
-
-        /* Drop-shadow intensifies as zoom increases */
-        const s = (scale - 1) / 1.2;
-        const sh1 = 60 + s * 60,  op1 = 0.10 + s * 0.08;
-        const sh2 = 20 + s * 28,  op2 = 0.08 + s * 0.06;
-        img.style.filter =
-          `drop-shadow(0 ${sh1}px ${sh1*2}px rgba(42,37,32,${op1.toFixed(2)}))` +
-          ` drop-shadow(0 ${sh2}px ${sh2*2}px rgba(42,37,32,${op2.toFixed(2)}))` +
-          ` drop-shadow(0 4px 16px rgba(42,37,32,.05))`;
-
-        /* Aura light follows zoom point */
-        aura.style.background =
-          `radial-gradient(circle at ${ox}% ${oy}%, ${p.aura} 0%, transparent 60%)`;
-
-        /* Dimensions badge fade in at last phase */
-        const dimProg = Math.max(0, Math.min(1, (prog - (N-1)/N) / (1/N) * 1.8));
-        dims.style.opacity   = dimProg;
-        dims.style.transform = `translateX(-50%) translateY(${(1 - dimProg) * 14}px)`;
+  /* ---- Color variants: recolor the already-whitened base photo by
+     HSL "colorize" — keep each pixel's relative lightness (so the fabric's
+     folds, shadows, and highlights stay intact as shading) but replace its
+     hue/saturation outright with the target swatch's. An earlier version
+     used a luminance-multiply instead, which is bounded by the original
+     pixel's brightness — on a mid-dark base photo that capped how vivid any
+     recolor could look (light targets like ivory came out muddy/grayish).
+     Driving hue+saturation directly from the target and only borrowing
+     lightness from the photo fixes that, at the cost of being a slightly
+     bigger departure from the literal photographed shading. Background
+     pixels (exact white) are left untouched either way, since recoloring
+     them would paint a visible colored box instead of blending into the
+     page. ---- */
+  /* Flood-fill (from the four borders) every near-white-to-light, low-
+     saturation pixel that's CONNECTED to the edge — this catches the real
+     background plus any soft floor-contact shadow gradient leading into it
+     (both are continuous light/neutral regions touching the border), while
+     leaving the product's own dark fabric/legs alone (they're well below
+     the lightness floor, so the fill can't pass through them) and leaving
+     isolated bright fabric highlights alone too (they're surrounded by
+     dark fabric, not connected to the border through light pixels). This
+     replaces an earlier attempt that skipped a fixed row-range, which
+     either left a colored glow in the shadow (range too small) or left a
+     real chunk of fabric uncolored (range too big) — connectivity instead
+     of position correctly separates "shadow that touches the floor" from
+     "fabric that doesn't", regardless of where either one sits in the frame. */
+  function floodFillShadowMask(data, w, h) {
+    const isShadowish = (i) => {
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      return Math.min(r, g, b) > 80 && Math.max(r, g, b) - Math.min(r, g, b) < 25;
+    };
+    const mask = new Uint8Array(w * h);
+    const seen = new Uint8Array(w * h);
+    const queue = [];
+    for (let x = 0; x < w; x++) { queue.push(x, (h - 1) * w + x); }
+    for (let y = 0; y < h; y++) { queue.push(y * w, y * w + (w - 1)); }
+    let qi = 0;
+    while (qi < queue.length) {
+      const p = queue[qi++];
+      if (seen[p]) continue;
+      seen[p] = 1;
+      if (!isShadowish(p * 4)) continue;
+      mask[p] = 1;
+      const x = p % w, y = (p - x) / w;
+      if (x > 0) queue.push(p - 1);
+      if (x < w - 1) queue.push(p + 1);
+      if (y > 0) queue.push(p - w);
+      if (y < h - 1) queue.push(p + w);
+    }
+    return mask;
+  }
+  function colorizeFromWhitened(img, hex) {
+    const r0 = parseInt(hex.slice(1, 3), 16), g0 = parseInt(hex.slice(3, 5), 16), b0 = parseInt(hex.slice(5, 7), 16);
+    return new Promise((resolve) => {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const data = imgData.data;
+      const shadowMask = floodFillShadowMask(data, w, h);
+      /* Flat solid fill instead of shading-preserving recolor: every
+         "product" pixel (not background, not the flood-filled shadow)
+         becomes the exact same target RGB. The shaded version kept fold/
+         highlight detail but the per-pixel lightness math kept producing
+         uneven blotches wherever the source shading was uneven (most
+         visibly around the legs) — a flat silhouette has no shading math
+         to go wrong, at the cost of looking more like a color swatch than
+         a studio photo. */
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        if (r === 255 && g === 255 && b === 255) continue;
+        if (shadowMask[i / 4]) continue;
+        data[i] = r0; data[i + 1] = g0; data[i + 2] = b0;
       }
+      ctx.putImageData(imgData, 0, 0);
+      canvas.toBlob((blob) => resolve(URL.createObjectURL(blob)), 'image/png');
+    });
+  }
+
+  const productImgs = [...document.querySelectorAll('[data-product] img:not(.color-frame)')];
+  Promise.all(productImgs.map((img) => whitenBackdrop(img))).then(async () => {
+    /* ---- Match each .product-frame's box to its own photo's actual aspect
+       ratio. The frame used a fixed 16:11 box with object-fit:contain so
+       every product lined up to the same width, but these new crops don't
+       all share that ratio — whichever ones are taller/narrower than 16:11
+       got letterboxed (empty space above/below the sofa inside the box),
+       which is what pushed the label far below the visible product. ---- */
+    productImgs.forEach((img) => {
+      const frame = img.closest('.product-frame');
+      frame.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
     });
 
-    /* ── Image entrance (section scrolls in) ── */
-    gsap.fromTo(img,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out',
-        scrollTrigger:{ trigger: wrapper, start: 'top 85%' }
-      }
-    );
+    /* ---- Wire every color-switcher (MELO BUBBLE, MELO STONE, ...): generate
+       each one's recolored variants once its base photo is whitened, then
+       click-cycle through them. Click-driven (not scroll-tied) so there's no
+       timing/pacing dependency on how fast the user scrolls. ---- */
+    const switchers = [...document.querySelectorAll('.color-switcher')];
+    await Promise.all(switchers.map(async (switcher) => {
+      const baseImg = switcher.querySelector('img:not(.color-frame)');
+      const colorFrames = [...switcher.querySelectorAll('.color-frame')];
+      await Promise.all(colorFrames.map(async (frame) => {
+        /* MELO STONE's variants are real separate photos (.color-frame-real),
+           not algorithmic recolors — just clean their backdrop the same way
+           the base photo was cleaned. Everything else still gets the
+           synthetic solid-fill recolor from its single base photo. */
+        if (frame.classList.contains('color-frame-real')) {
+          if (frame.src.includes('ivory')) {
+            // other near-white real photos (e.g. MELO BOX ivory) get the
+            // soft easing instead — see whitenBackdrop's `soft` option.
+            await whitenBackdrop(frame, { soft: true, softFloor: 160, neutrality: 40, softPower: 1 });
+          } else {
+            await whitenBackdrop(frame);
+          }
+        } else {
+          frame.src = await colorizeFromWhitened(baseImg, frame.dataset.color);
+        }
+      }));
+      const layers = [baseImg, ...colorFrames];
+      let active = 0;
+      switcher.querySelector('.color-next').addEventListener('click', (e) => {
+        e.preventDefault();
+        gsap.to(layers[active], { opacity: 0, duration: 0.35, ease: 'power1.out' });
+        active = (active + 1) % layers.length;
+        gsap.to(layers[active], { opacity: 1, duration: 0.35, ease: 'power1.out' });
+      });
+    }));
 
+    /* ---- Product parallax: each product image zooms in then out as its own
+       section scrolls through the viewport — scale 0.82 -> 1.18, driven purely
+       by scroll position via scrub (no timed tweens, so it can't ever stall). ---- */
+    document.querySelectorAll('[data-product]').forEach((stage) => {
+      /* All stacked layers (base + MELO BUBBLE's color variants, where
+         present) get the same scale tween, so whichever one the color
+         switcher reveals is already at the correct current zoom level
+         instead of snapping back to scale:1. */
+      const imgs = stage.querySelectorAll('img');
+      gsap.fromTo(imgs,
+        { scale: 0.82 },
+        {
+          scale: 1.18,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: stage,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        }
+      );
+
+      /* Label + index rise into place as the product scrolls into view.
+         Driven by scrub (direct scroll-position -> value mapping via
+         ScrollTrigger's seek, not a timed tween), so there's nothing that
+         needs a ticking clock to "play out".
+
+         Two real bugs found and fixed here, in order:
+         1) yPercent + stagger on a scrubbed tween left the element with TWO
+            stacked translate() calls in its inline transform, so it never
+            visually reached y:0 — switched to plain measured-pixel values.
+         2) The trigger was keyed to the STAGE's top, but the label sits at
+            the stage's bottom (bottom:6vh of a 100vh section) — by the time
+            that trigger window passed, the label was still ~800-1100px
+            below the viewport (confirmed via getBoundingClientRect), so the
+            animation finished before it was ever visible. Fixed by keying
+            each line's own trigger to ITS OWN element instead of the stage,
+            so the reveal window is wherever that line actually scrolls into
+            view — confirmed below this loop. */
+      const lines = [
+        stage.querySelector('.product-label'),
+        stage.querySelector('.product-index')
+      ];
+      lines.forEach((wrap) => {
+        const line = wrap.querySelector('span');
+        const startPx = line.offsetHeight * 1.2;
+        gsap.fromTo(line,
+          { y: startPx },
+          {
+            y: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: wrap,
+              start: 'bottom 95%',
+              end: 'bottom 55%',
+              scrub: true
+            }
+          }
+        );
+      });
+    });
+    ScrollTrigger.refresh();
   });
 
-})();
-
+  ScrollTrigger.refresh();
 </script>
+
 </body>
 </html>
